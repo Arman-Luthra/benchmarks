@@ -36,8 +36,9 @@ This metric matters because it's what developers actually experience—the time 
 
 - Sandbox teardown/destruction time
 - Subsequent command execution times
-- File system operations
+- File system operations (measured separately by the [Dax Benchmark](#dax-benchmark-disk--cpu--pause-resume))
 - Network transfer speeds within the sandbox
+- CPU throughput and virtualization overhead (measured separately by the [Dax Benchmark](#dax-benchmark-disk--cpu--pause-resume))
 
 ## Test Procedure
 
@@ -318,6 +319,48 @@ npm run bench -- --provider e2b
 
 **Note**: Your results will differ based on your network location and conditions.
 
+## Dax Benchmark (Disk / CPU / Pause-Resume)
+
+Named after [@thdxr's public sandbox-provider requirements](https://x.com/thdxr): fast,
+non-networked disk; fast CPU that's virtualizing on bare metal; and the ability to
+pause/resume. This is a sub-test under the sandbox family (`src/sandbox/dax-*.ts`) that
+runs against the same provider registry as the regular TTI benchmark, via
+`npm run bench:dax` / `npm run bench -- --mode dax`. It runs weekly (not daily), since each
+iteration performs a real 256MB disk write/read and, where supported, a real pause/resume
+round-trip — heavier per-iteration cost than the TTI probe.
+
+Each iteration creates one sandbox and runs three probes back-to-back before destroying it:
+
+- **Disk** — writes and reads back a 256MB file (`diskSeqWriteMbps` / `diskSeqReadMbps`),
+  then samples fsync latency across 20 small-file writes (`diskFsyncLatencyMs`). All timing
+  happens inside the sandbox via a `node -e` script (avoids shell-dialect differences across
+  providers and exec/RTT overhead skewing results). **Caveat**: sequential read can be
+  inflated by page cache — this is not a cold-read benchmark. Fsync latency is the more
+  reliable "not networked" signal: local NVMe is sub-millisecond, while networked/remote
+  block storage tends to be materially higher and jitterier.
+- **CPU** — runs a fixed one-second window of SHA-256 hashing to measure throughput
+  (`cpuOpsPerSec`), and separately samples `/proc/stat` before/after a one-second window to
+  compute CPU steal time (`cpuStealPercent`). **Caveat**: steal time is a proxy, not a
+  guarantee — near-zero steal is *consistent with* running directly on a hypervisor on bare
+  metal rather than nested inside another VM layer, but isn't a direct measurement of the
+  underlying virtualization stack.
+- **Pause/Resume** — attempted for every provider via the unified `sandbox.pause()` /
+  `sandbox.resume()` primitive added in
+  [computesdk/computesdk PR #645](https://github.com/computesdk/computesdk/pull/645). A
+  marker file's contents must survive the round-trip for the iteration to count as
+  supported — this is what distinguishes a real pause from a cold rebuild via
+  snapshot+recreate. Providers without a real pause/resume implementation report
+  `pauseResumeSupported: false` with a reason, rather than being scored as a failure.
+  **Caveat**: as of this writing, PR #645 is unmerged, so this probe reports "not supported"
+  for every provider until it merges and this repo's `@computesdk/*` dependencies are
+  bumped — at which point it activates automatically for whichever providers ship support,
+  no benchmark code changes required.
+
+Composite scoring (`src/sandbox/dax-scoring.ts`) weights disk, CPU, and pause/resume (when
+supported) roughly evenly, renormalizing the weights over whichever metric groups actually
+ran — a provider without pause/resume support isn't penalized for a capability it doesn't
+have, it's simply scored on disk + CPU.
+
 ## Quarterly Stress Tests
 
 Starting Q2 2026, we're introducing large-scale stress tests that go beyond daily measurements.
@@ -356,10 +399,14 @@ Methodology details will be published before the first quarterly test runs.
 - Cost efficiency
 - Feature differences between providers
 
+Disk throughput, CPU throughput/virtualization overhead, and pause/resume are now covered
+separately by the [Dax Benchmark](#dax-benchmark-disk--cpu--pause-resume).
+
 ## Changelog
 
 | Date | Change |
 |------|--------|
+| 2026-07-16 | Added the Dax Benchmark: disk, CPU, and pause/resume sub-test under the sandbox family |
 | 2026-03-04 | Added staggered TTI and burst TTI test modes; separated results into per-test subdirectories |
 | 2026-03-01 | Added composite scoring methodology |
 | 2026-02-19 | Initial methodology documentation |

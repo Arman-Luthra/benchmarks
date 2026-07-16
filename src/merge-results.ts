@@ -17,6 +17,10 @@
  *
  * With --mode browser-throughput, merges throughput benchmark results into
  * results/browser-throughput/latest.json.
+ *
+ * With --mode dax, merges dax (disk/CPU/pause-resume) benchmark results —
+ * deduplicates by provider, computes dax-specific composite scores, and
+ * writes the combined file to results/dax/latest.json.
  */
 import fs from 'fs';
 import path from 'path';
@@ -28,8 +32,10 @@ import {
   computeThroughputCompositeScores,
   sortThroughputByCompositeScore,
 } from './browser/throughput-scoring.js';
+import { computeDaxCompositeScores, sortDaxByCompositeScore } from './sandbox/dax-scoring.js';
 import { printResultsTable, writeResultsJson } from './sandbox/table.js';
 import type { BenchmarkResult } from './sandbox/types.js';
+import type { DaxBenchmarkResult } from './sandbox/dax-types.js';
 import type { StorageBenchmarkResult } from './storage/types.js';
 import type { SnapshotForkBenchmarkResult } from './storage/snapshot-fork-types.js';
 import type { BrowserBenchmarkResult } from './browser/types.js';
@@ -47,7 +53,7 @@ function getArgValue(flag: string): string | undefined {
 const inputDir = getArgValue('--input');
 const mergeMode = getArgValue('--mode');
 if (!inputDir) {
-  console.error('Usage: tsx src/merge-results.ts --input <artifacts-dir> [--mode storage|snapshot-fork|browser|browser-throughput]');
+  console.error('Usage: tsx src/merge-results.ts --input <artifacts-dir> [--mode storage|snapshot-fork|browser|browser-throughput|dax]');
   process.exit(1);
 }
 
@@ -582,6 +588,101 @@ async function mainBrowserThroughput() {
   console.log(`Copied latest: ${latestPath}`);
 }
 
+/**
+ * Print a dax results table to stdout.
+ */
+function printDaxResultsTable(results: DaxBenchmarkResult[]): void {
+  const sorted = sortDaxByCompositeScore(results);
+
+  console.log(`\n${'='.repeat(115)}`);
+  console.log('  DAX BENCHMARK RESULTS (disk / CPU / pause-resume)');
+  console.log('='.repeat(115));
+  console.log(
+    ['Provider', 'Score', 'Write Mbps', 'Read Mbps', 'Fsync ms', 'CPU ops/s', 'Steal %', 'Pause/Resume', 'Status']
+      .map((h, i) => h.padEnd([14, 8, 12, 12, 10, 12, 9, 16, 10][i]))
+      .join(' | ')
+  );
+  console.log(
+    [14, 8, 12, 12, 10, 12, 9, 16, 10].map(w => '-'.repeat(w)).join('-+-')
+  );
+
+  for (const r of sorted) {
+    if (r.skipped) {
+      console.log([r.provider.padEnd(14), '--'.padEnd(8), '--'.padEnd(12), '--'.padEnd(12), '--'.padEnd(10), '--'.padEnd(12), '--'.padEnd(9), '--'.padEnd(16), 'SKIPPED'.padEnd(10)].join(' | '));
+      continue;
+    }
+    const ok = r.iterations.filter(i => !i.error).length;
+    const total = r.iterations.length;
+    const score = r.compositeScore !== undefined ? r.compositeScore.toFixed(1) : '--';
+    const write = r.summary.diskSeqWriteMbps.median.toFixed(0);
+    const read = r.summary.diskSeqReadMbps.median.toFixed(0);
+    const fsync = r.summary.diskFsyncLatencyMs.median.toFixed(2);
+    const cpu = r.summary.cpuOpsPerSec.median.toFixed(0);
+    const steal = r.summary.cpuStealPercent.median.toFixed(2);
+    const pauseResume = r.pauseResumeSupported
+      ? `${r.summary.pauseMs!.median.toFixed(0)}/${r.summary.resumeMs!.median.toFixed(0)}ms`
+      : 'not supported';
+    console.log([r.provider.padEnd(14), score.padEnd(8), write.padEnd(12), read.padEnd(12), fsync.padEnd(10), cpu.padEnd(12), steal.padEnd(9), pauseResume.padEnd(16), `${ok}/${total} OK`.padEnd(10)].join(' | '));
+  }
+  console.log('='.repeat(115));
+}
+
+/**
+ * Merge dax (disk/CPU/pause-resume) benchmark results. Results are already
+ * deduplicated per-provider by the job matrix, but the merge still handles
+ * the same stale-checkout-vs-fresh-artifact precedence as every other mode.
+ */
+async function mainDax() {
+  const jsonFiles: string[] = [];
+  function walk(dir: string) {
+    if (!fs.existsSync(dir)) return;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name === 'latest.json') jsonFiles.push(full);
+    }
+  }
+  walk(inputDir!);
+
+  if (jsonFiles.length === 0) {
+    console.error(`No latest.json files found in ${inputDir}`);
+    process.exit(1);
+  }
+
+  console.log(`Found ${jsonFiles.length} result files`);
+
+  const seen = new Map<string, { result: DaxBenchmarkResult; fromSingleProvider: boolean }>();
+
+  for (const file of jsonFiles) {
+    const raw = JSON.parse(fs.readFileSync(file, 'utf-8')) as { results: DaxBenchmarkResult[] };
+    const fromSingleProvider = raw.results.length === 1;
+    for (const result of raw.results) {
+      const existing = seen.get(result.provider);
+      if (!existing || (fromSingleProvider && !existing.fromSingleProvider)) {
+        seen.set(result.provider, { result, fromSingleProvider });
+      }
+    }
+  }
+
+  const deduped = Array.from(seen.values()).map(e => e.result);
+  console.log(`\nMerging ${deduped.length} provider results for mode: dax`);
+
+  computeDaxCompositeScores(deduped);
+  printDaxResultsTable(deduped);
+
+  const { writeDaxResultsJson } = await import('./sandbox/dax-benchmark.js');
+  const timestamp = new Date().toISOString().slice(0, 10);
+  const resultsDir = path.resolve(ROOT, 'results/dax');
+  fs.mkdirSync(resultsDir, { recursive: true });
+
+  const outPath = path.join(resultsDir, `${timestamp}.json`);
+  await writeDaxResultsJson(deduped, outPath);
+
+  const latestPath = path.join(resultsDir, 'latest.json');
+  fs.copyFileSync(outPath, latestPath);
+  console.log(`Copied latest: ${latestPath}`);
+}
+
 const runner = mergeMode === 'storage'
   ? mainStorage
   : mergeMode === 'snapshot-fork'
@@ -590,6 +691,8 @@ const runner = mergeMode === 'storage'
   ? mainBrowser
   : mergeMode === 'browser-throughput'
   ? mainBrowserThroughput
+  : mergeMode === 'dax'
+  ? mainDax
   : main;
 runner().catch(err => {
   console.error('Merge failed:', err);

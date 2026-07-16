@@ -145,6 +145,22 @@ All tests run on GitHub Actions at 00:00 UTC daily. Providers are tested using C
 
 <br>
 
+### Dax Benchmark (Disk / CPU / Pause-Resume)
+
+Named after [@thdxr's public sandbox-provider requirements](https://x.com/thdxr): fast,
+non-networked disk; fast CPU that's virtualizing on bare metal; and the ability to
+pause/resume. This is a weekly sub-test under the sandbox family (`npm run bench:dax`),
+using the same provider registry as the daily TTI tests. Each iteration measures sequential
+disk write/read throughput and fsync latency, CPU hashing throughput and `/proc/stat` steal
+time, and — where a provider supports it via the unified `sandbox.pause()`/`sandbox.resume()`
+primitive being added in [computesdk/computesdk PR #645](https://github.com/computesdk/computesdk/pull/645)
+— a real pause/resume round-trip verified by a marker file surviving the trip. Providers
+without that support are reported as "not supported," not penalized.
+
+[Full dax methodology →](./METHODOLOGY.md#dax-benchmark-disk--cpu--pause-resume)
+
+<br>
+
 ## Transparency
 
 - 📖 **Open source** — All benchmark code is public

@@ -7,6 +7,8 @@ import { fileURLToPath } from 'url';
 import { runBenchmark } from './sandbox/benchmark.js';
 import { runConcurrentBenchmark } from './sandbox/concurrent.js';
 import { runStaggeredBenchmark } from './sandbox/staggered.js';
+import { runDaxBenchmark, writeDaxResultsJson } from './sandbox/dax-benchmark.js';
+import { computeDaxCompositeScores } from './sandbox/dax-scoring.js';
 import { runStorageBenchmark, writeStorageResultsJson } from './storage/benchmark.js';
 import {
   runSnapshotForkBenchmark,
@@ -32,6 +34,7 @@ import { computeStorageCompositeScores } from './storage/scoring.js';
 import { computeBrowserCompositeScores } from './browser/scoring.js';
 import { computeThroughputCompositeScores } from './browser/throughput-scoring.js';
 import type { BenchmarkResult, BenchmarkMode } from './sandbox/types.js';
+import type { DaxBenchmarkResult } from './sandbox/dax-types.js';
 import type { StorageBenchmarkResult } from './storage/types.js';
 import type { SnapshotForkBenchmarkResult } from './storage/snapshot-fork-types.js';
 import type { DatasetPreset } from './storage/snapshot-fork-types.js';
@@ -58,18 +61,19 @@ function getArgValue(args: string[], flag: string): string | undefined {
 }
 
 /** Resolve which modes to run */
-function getModesToRun(): BenchmarkMode[] | ['storage'] | ['snapshot-fork'] | ['browser'] | ['browser-throughput'] {
+function getModesToRun(): BenchmarkMode[] | ['storage'] | ['snapshot-fork'] | ['browser'] | ['browser-throughput'] | ['dax'] {
   if (!rawMode) return ['sequential', 'staggered', 'burst'];
   if (rawMode === 'storage') return ['storage'];
   if (rawMode === 'snapshot-fork') return ['snapshot-fork'];
   if (rawMode === 'browser') return ['browser'];
   if (rawMode === 'browser-throughput') return ['browser-throughput'];
+  if (rawMode === 'dax') return ['dax'];
   const m = rawMode === 'concurrent' ? 'burst' : rawMode as BenchmarkMode;
   return [m];
 }
 
 /** Map mode to results subdirectory name */
-function modeToDir(m: BenchmarkMode | 'storage' | 'snapshot-fork' | 'browser-throughput'): string {
+function modeToDir(m: BenchmarkMode | 'storage' | 'snapshot-fork' | 'browser-throughput' | 'dax'): string {
   switch (m) {
     case 'sequential': return 'sequential_tti';
     case 'staggered': return 'staggered_tti';
@@ -78,6 +82,7 @@ function modeToDir(m: BenchmarkMode | 'storage' | 'snapshot-fork' | 'browser-thr
     case 'storage': return 'storage';
     case 'snapshot-fork': return 'snapshot-fork';
     case 'browser-throughput': return 'browser-throughput';
+    case 'dax': return 'dax';
     default: return `${m}_tti`;
   }
 }
@@ -256,6 +261,52 @@ async function runSnapshotFork(toRun: typeof storageProviders, datasetLabel: str
   await writeSnapshotForkResultsJson(results, outPath);
 
   const latestPath = path.join(datasetDir, 'latest.json');
+  fs.copyFileSync(outPath, latestPath);
+  console.log(`Copied latest: ${latestPath}`);
+}
+
+async function runDax(toRun: typeof providers): Promise<void> {
+  console.log('\n' + '='.repeat(70));
+  console.log('  MODE: DAX (disk / CPU / pause-resume)');
+  console.log(`  Iterations per provider: ${iterations}`);
+  console.log('='.repeat(70));
+
+  const results: DaxBenchmarkResult[] = [];
+
+  for (const providerConfig of toRun) {
+    const result = await runDaxBenchmark({ ...providerConfig, iterations });
+    results.push(result);
+  }
+
+  // Compute composite scores
+  computeDaxCompositeScores(results);
+
+  // Print summary
+  console.log('\n--- Dax Benchmark Results ---');
+  for (const r of results) {
+    if (r.skipped) {
+      console.log(`${r.provider}: SKIPPED (${r.skipReason})`);
+      continue;
+    }
+    const ok = r.iterations.filter(i => !i.error).length;
+    const total = r.iterations.length;
+    console.log(`${r.provider}:`);
+    console.log(`  Disk: ${r.summary.diskSeqWriteMbps.median.toFixed(1)} Mbps write / ${r.summary.diskSeqReadMbps.median.toFixed(1)} Mbps read / ${r.summary.diskFsyncLatencyMs.median.toFixed(2)}ms fsync (median)`);
+    console.log(`  CPU: ${r.summary.cpuOpsPerSec.median.toFixed(0)} ops/s, ${r.summary.cpuStealPercent.median.toFixed(2)}% steal (median)`);
+    console.log(`  Pause/Resume: ${r.pauseResumeSupported ? `${r.summary.pauseMs!.median.toFixed(0)}ms pause / ${r.summary.resumeMs!.median.toFixed(0)}ms resume (median)` : 'not supported'}`);
+    console.log(`  Score: ${r.compositeScore?.toFixed(1) || '--'} (${ok}/${total} OK)`);
+  }
+
+  // Write JSON results to dax subdirectory
+  const timestamp = new Date().toISOString().slice(0, 10);
+  const resultsDir = path.resolve(__dirname, '../results/dax');
+  fs.mkdirSync(resultsDir, { recursive: true });
+
+  const outPath = path.join(resultsDir, `${timestamp}.json`);
+  await writeDaxResultsJson(results, outPath);
+
+  // Copy results to latest.json
+  const latestPath = path.join(resultsDir, 'latest.json');
   fs.copyFileSync(outPath, latestPath);
   console.log(`Copied latest: ${latestPath}`);
 }
@@ -524,6 +575,27 @@ async function main() {
 
     await runSnapshotFork(toRun, datasetArg);
     console.log('\nAll snapshot/fork tests complete.');
+    return;
+  }
+
+  // Handle dax mode separately (disk / CPU / pause-resume sub-test, same
+  // provider registry as the regular sandbox benchmark)
+  if (modes[0] === 'dax') {
+    console.log('ComputeSDK Dax Benchmark (disk / CPU / pause-resume)');
+    console.log(`Date: ${new Date().toISOString()}\n`);
+
+    const toRun = providerFilter
+      ? providers.filter(p => p.name === providerFilter)
+      : providers;
+
+    if (toRun.length === 0) {
+      console.error(`Unknown provider: ${providerFilter}`);
+      console.error(`Available: ${providers.map(p => p.name).join(', ')}`);
+      process.exit(1);
+    }
+
+    await runDax(toRun);
+    console.log('\nAll dax tests complete.');
     return;
   }
 
