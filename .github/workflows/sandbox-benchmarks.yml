@@ -367,7 +367,9 @@ jobs:
               results.forEach(r => {
                 const ok = r.iterations.filter(it => !it.error).length;
                 const total = r.iterations.length;
-                body += `| ${r.provider} | ${mode.metric(r)} | ${ok}/${total} |\n`;
+                const latest = [...r.iterations].reverse().find(i => i.phasesCompleted != null);
+                const status = latest ? `${latest.phasesCompleted}/${latest.phasesTotal} phases` : `${ok}/${total} OK`;
+                body += `| ${r.provider} | ${mode.metric(r)} | ${status} |\n`;
               });
 
               body += '\n';
