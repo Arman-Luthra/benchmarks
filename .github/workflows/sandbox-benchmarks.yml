@@ -39,6 +39,7 @@ on:
           - sequential
           - staggered
           - burst
+          - sandbox-dax
 
 concurrency:
   group: benchmarks
@@ -161,10 +162,99 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+  workload-bench:
+    name: Bench ${{ matrix.provider }} sandbox-dax
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.mode == '' || github.event.inputs.mode == 'sandbox-dax' }}
+    runs-on: namespace-profile-default
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        provider:
+          - archil
+          - beam
+          - blaxel
+          - cloud-run
+          - cloudflare
+          - codesandbox
+          - createos
+          - daytona
+          - declaw
+          - e2b
+          - hopx
+          - isorun
+          - modal
+          - northflank
+          - runloop
+          - superserve
+          - tensorlake
+          - upstash
+          - vercel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+      - name: Install dependencies
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            npm update
+          else
+            npm ci
+          fi
+      - name: Clear stale results from checkout
+        run: rm -rf results/
+      - name: Run dax benchmark
+        env:
+          COMPUTESDK_API_KEY: ${{ secrets.COMPUTESDK_API_KEY }}
+          ARCHIL_API_KEY: ${{ secrets.ARCHIL_API_KEY }}
+          ARCHIL_REGION: ${{ secrets.ARCHIL_REGION }}
+          ARCHIL_DISK_ID: ${{ secrets.ARCHIL_DISK_ID }}
+          BEAM_TOKEN: ${{ secrets.BEAM_TOKEN }}
+          BEAM_WORKSPACE_ID: ${{ secrets.BEAM_WORKSPACE_ID }}
+          CLOUD_RUN_SANDBOX_URL: ${{ secrets.CLOUD_RUN_SANDBOX_URL }}
+          CLOUD_RUN_SANDBOX_SECRET: ${{ secrets.CLOUD_RUN_SANDBOX_SECRET }}
+          BL_API_KEY: ${{ secrets.BL_API_KEY }}
+          BL_WORKSPACE: ${{ secrets.BL_WORKSPACE }}
+          CLOUDFLARE_SANDBOX_URL: ${{ secrets.CLOUDFLARE_SANDBOX_URL }}
+          CLOUDFLARE_SANDBOX_SECRET: ${{ secrets.CLOUDFLARE_SANDBOX_SECRET }}
+          CSB_API_KEY: ${{ secrets.CSB_API_KEY }}
+          CREATEOS_SANDBOX_API_KEY: ${{ secrets.CREATEOS_SANDBOX_API_KEY }}
+          DAYTONA_API_KEY: ${{ secrets.DAYTONA_API_KEY }}
+          DECLAW_API_KEY: ${{ secrets.DECLAW_API_KEY }}
+          E2B_API_KEY: ${{ secrets.E2B_API_KEY }}
+          HOPX_API_KEY: ${{ secrets.HOPX_API_KEY }}
+          ISORUN_API_KEY: ${{ secrets.ISORUN_API_KEY }}
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+          NORTHFLANK_TOKEN: ${{ secrets.NORTHFLANK_TOKEN }}
+          NORTHFLANK_PROJECT_ID: ${{ secrets.NORTHFLANK_PROJECT_ID }}
+          RUNLOOP_API_KEY: ${{ secrets.RUNLOOP_API_KEY }}
+          SUPERSERVE_API_KEY: ${{ secrets.SUPERSERVE_API_KEY }}
+          TENSORLAKE_API_KEY: ${{ secrets.TENSORLAKE_API_KEY }}
+          UPSTASH_BOX_API_KEY: ${{ secrets.UPSTASH_BOX_API_KEY }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm run bench -- \
+            --provider ${{ matrix.provider }} \
+            --mode sandbox-dax \
+            --iterations ${{ github.event_name == 'pull_request' && '1' || '3' }}
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-${{ matrix.provider }}-sandbox-dax
+          path: results/
+          if-no-files-found: ignore
+          retention-days: 7
+
   collect:
     name: Collect Results
     runs-on: namespace-profile-default
-    needs: bench
+    needs: [bench, workload-bench]
     if: always()
     steps:
       - uses: actions/checkout@v4
@@ -253,6 +343,31 @@ jobs:
                 const ok = r.iterations.filter(it => !it.error).length;
                 const total = r.iterations.length;
                 body += `| ${i + 1} | ${r.provider} | ${score} | ${median} | ${p95} | ${p99} | ${ok}/${total} |\n`;
+              });
+
+              body += '\n';
+            }
+
+            const workloadModes = [
+              { key: 'sandbox-dax', label: 'Sandbox Dax', metric: r => `total ${(r.summary.totalMs.median / 1000).toFixed(2)}s · clone ${(r.summary.cloneMs.median / 1000).toFixed(2)}s · install ${(r.summary.installMs.median / 1000).toFixed(2)}s · typecheck ${(r.summary.typecheckMs.median / 1000).toFixed(2)}s` },
+            ];
+            for (const mode of workloadModes) {
+              const latestPath = path.join('results', mode.key, 'latest.json');
+              if (!fs.existsSync(latestPath)) continue;
+
+              const data = JSON.parse(fs.readFileSync(latestPath, 'utf-8'));
+              const results = data.results.filter(r => !r.skipped);
+              if (results.length === 0) continue;
+              hasResults = true;
+
+              body += `### ${mode.label}\n\n`;
+              body += '| Provider | Metric | Status |\n';
+              body += '|----------|--------|--------|\n';
+
+              results.forEach(r => {
+                const ok = r.iterations.filter(it => !it.error).length;
+                const total = r.iterations.length;
+                body += `| ${r.provider} | ${mode.metric(r)} | ${ok}/${total} |\n`;
               });
 
               body += '\n';
