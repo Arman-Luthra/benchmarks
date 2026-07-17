@@ -8,6 +8,8 @@ const BENCH_SCRIPT_URL = 'https://raw.githubusercontent.com/anomalyco/opencode/p
 
 export interface DaxTimingResult {
   totalMs: number;
+  phasesCompleted?: number;
+  phasesTotal?: number;
   prepareMs?: number;
   bunDownloadMs?: number;
   bunUnpackMs?: number;
@@ -35,6 +37,9 @@ export interface DaxBenchmarkResult {
   iterations: DaxTimingResult[];
   summary: {
     totalMs: Stats;
+    prepareMs: Stats;
+    bunDownloadMs: Stats;
+    bunUnpackMs: Stats;
     cloneMs: Stats;
     installMs: Stats;
     typecheckMs: Stats;
@@ -73,14 +78,18 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
       const result = await runDaxIteration(sandbox, name, timeout);
       results.push(result);
       if (result.error) {
-        const phases = [];
-        if (result.cloneMs) phases.push(`clone ${(result.cloneMs / 1000).toFixed(2)}s`);
-        if (result.installMs) phases.push(`install ${(result.installMs / 1000).toFixed(2)}s`);
-        if (result.typecheckMs) phases.push(`typecheck ${(result.typecheckMs / 1000).toFixed(2)}s`);
-        const phaseStr = phases.length > 0 ? ` | ${phases.join(' | ')}` : '';
-        console.log(`    FAILED: ${result.error}${phaseStr}`);
+        const parts = [];
+        if (result.prepareMs) parts.push(`prepare ${(result.prepareMs / 1000).toFixed(2)}s`);
+        if (result.bunDownloadMs) parts.push(`bun dl ${(result.bunDownloadMs / 1000).toFixed(2)}s`);
+        if (result.bunUnpackMs) parts.push(`bun unpack ${(result.bunUnpackMs / 1000).toFixed(2)}s`);
+        if (result.cloneMs) parts.push(`clone ${(result.cloneMs / 1000).toFixed(2)}s`);
+        if (result.installMs) parts.push(`install ${(result.installMs / 1000).toFixed(2)}s`);
+        if (result.typecheckMs) parts.push(`typecheck ${(result.typecheckMs / 1000).toFixed(2)}s`);
+        const phaseStr = parts.length > 0 ? ` | ${parts.join(' | ')}` : '';
+        const score = result.phasesCompleted != null ? `${result.phasesCompleted}/${result.phasesTotal}` : '';
+        console.log(`    FAILED${score ? ` (${score} phases)` : ''}: ${result.error}${phaseStr}`);
       } else {
-        console.log(`    Total: ${(result.totalMs! / 1000).toFixed(2)}s | clone ${(result.cloneMs! / 1000).toFixed(2)}s | install ${(result.installMs! / 1000).toFixed(2)}s | typecheck ${(result.typecheckMs! / 1000).toFixed(2)}s`);
+        console.log(`    OK (${result.phasesCompleted}/${result.phasesTotal}): total ${(result.totalMs! / 1000).toFixed(2)}s | prepare ${(result.prepareMs! / 1000).toFixed(2)}s | clone ${(result.cloneMs! / 1000).toFixed(2)}s | install ${(result.installMs! / 1000).toFixed(2)}s | typecheck ${(result.typecheckMs! / 1000).toFixed(2)}s`);
       }
     } catch (err) {
       const error = err instanceof Error ? err.message : String(err);
@@ -182,8 +191,14 @@ if (result.error) {
   benchError = result.error.message || String(result.error);
 }
 
+// Count completed phases
+const phaseKeys = ['prepare', 'cache_clear', 'bun_download', 'bun_unpack', 'clone', 'install', 'typecheck'];
+const phasesCompleted = phaseKeys.filter(k => phases[k] !== undefined).length;
+
 console.log(JSON.stringify({
   totalMs,
+  phasesCompleted,
+  phasesTotal: phaseKeys.length,
   prepareMs: phases.prepare,
   cacheClearMs: phases.cache_clear,
   bunDownloadMs: phases.bun_download,
@@ -229,6 +244,9 @@ function summarize(results: DaxTimingResult[]): DaxBenchmarkResult['summary'] {
   };
   return {
     totalMs: pick('totalMs'),
+    prepareMs: pick('prepareMs'),
+    bunDownloadMs: pick('bunDownloadMs'),
+    bunUnpackMs: pick('bunUnpackMs'),
     cloneMs: pick('cloneMs'),
     installMs: pick('installMs'),
     typecheckMs: pick('typecheckMs'),
@@ -237,7 +255,7 @@ function summarize(results: DaxTimingResult[]): DaxBenchmarkResult['summary'] {
 
 function emptySummary(): DaxBenchmarkResult['summary'] {
   const empty = { median: 0, p95: 0, p99: 0 };
-  return { totalMs: empty, cloneMs: empty, installMs: empty, typecheckMs: empty };
+  return { totalMs: empty, prepareMs: empty, bunDownloadMs: empty, bunUnpackMs: empty, cloneMs: empty, installMs: empty, typecheckMs: empty };
 }
 
 function round(n: number): number {
@@ -250,6 +268,8 @@ export async function writeDaxResultsJson(results: DaxBenchmarkResult[], outPath
     mode: r.mode,
     iterations: r.iterations.map(i => ({
       totalMs: round(i.totalMs),
+      ...(i.phasesCompleted !== undefined ? { phasesCompleted: i.phasesCompleted } : {}),
+      ...(i.phasesTotal !== undefined ? { phasesTotal: i.phasesTotal } : {}),
       ...(i.prepareMs !== undefined ? { prepareMs: round(i.prepareMs) } : {}),
       ...(i.cacheClearMs !== undefined ? { cacheClearMs: round(i.cacheClearMs) } : {}),
       ...(i.bunDownloadMs !== undefined ? { bunDownloadMs: round(i.bunDownloadMs) } : {}),

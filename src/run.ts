@@ -456,8 +456,9 @@ async function runSandboxDax(toRun: typeof providers): Promise<void> {
     }
     const ok = r.iterations.filter(i => !i.error).length;
     const total = r.iterations.length;
-    console.log(`${r.provider}:`);
-    console.log(`  Total: ${(r.summary.totalMs.median / 1000).toFixed(2)}s median | clone ${(r.summary.cloneMs.median / 1000).toFixed(2)}s | install ${(r.summary.installMs.median / 1000).toFixed(2)}s | typecheck ${(r.summary.typecheckMs.median / 1000).toFixed(2)}s (${ok}/${total} OK)`);
+    const latest = [...r.iterations].reverse().find(i => i.phasesCompleted != null);
+    const phaseScore = latest ? `${latest.phasesCompleted}/${latest.phasesTotal}` : '--';
+    console.log(`${r.provider}: ${phaseScore} phases | total ${(r.summary.totalMs.median / 1000).toFixed(2)}s | prepare ${(r.summary.prepareMs.median / 1000).toFixed(2)}s | clone ${(r.summary.cloneMs.median / 1000).toFixed(2)}s | install ${(r.summary.installMs.median / 1000).toFixed(2)}s | typecheck ${(r.summary.typecheckMs.median / 1000).toFixed(2)}s (${ok}/${total} OK)`);
   }
 
   const timestamp = new Date().toISOString().slice(0, 10);

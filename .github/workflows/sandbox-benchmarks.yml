@@ -349,7 +349,7 @@ jobs:
             }
 
             const workloadModes = [
-              { key: 'sandbox-dax', label: 'Sandbox Dax', metric: r => `total ${(r.summary.totalMs.median / 1000).toFixed(2)}s · clone ${(r.summary.cloneMs.median / 1000).toFixed(2)}s · install ${(r.summary.installMs.median / 1000).toFixed(2)}s · typecheck ${(r.summary.typecheckMs.median / 1000).toFixed(2)}s` },
+              { key: 'sandbox-dax', label: 'Sandbox Dax', metric: r => { const l = [...r.iterations].reverse().find(i => i.phasesCompleted != null); const s = l ? `${l.phasesCompleted}/${l.phasesTotal}` : '--'; return `${s} phases · total ${(r.summary.totalMs.median / 1000).toFixed(2)}s · prepare ${(r.summary.prepareMs.median / 1000).toFixed(2)}s · clone ${(r.summary.cloneMs.median / 1000).toFixed(2)}s · install ${(r.summary.installMs.median / 1000).toFixed(2)}s · typecheck ${(r.summary.typecheckMs.median / 1000).toFixed(2)}s`; } },
             ];
             for (const mode of workloadModes) {
               const latestPath = path.join('results', mode.key, 'latest.json');
