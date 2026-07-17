@@ -48,10 +48,21 @@ export function navUrlForIteration(i: number): string {
   if (NAV_URLS.length > 0) return NAV_URLS[i % NAV_URLS.length];
   return RANDOM_URL;
 }
-// Match article-body links across both classic MediaWiki HTML (relative "/wiki/Foo")
-// and Parsoid read-HTML (protocol-relative absolute "//en.wikipedia.org/wiki/Foo").
-// :not([href*=":"]) still excludes namespace pages (Help:, File:) and external http(s) links.
-const ARTICLE_LINK = '#mw-content-text a[href*="/wiki/"]:not([href*=":"])';
+// Match article-body links across classic MediaWiki HTML (relative "/wiki/Foo"),
+// Parsoid read-HTML (protocol-relative "//en.wikipedia.org/wiki/Foo"), and the
+// newer absolute form ("https://en.wikipedia.org/wiki/Foo").
+// We can't use :not([href*=":"]) because that also rejects https: URLs. Instead
+// we select all /wiki/ links in the content area and filter in JS by checking
+// that the path segment after /wiki/ has no namespace colon (Help:, File:, etc.).
+const ARTICLE_LINK_SELECTOR = '#mw-content-text a[href*="/wiki/"]';
+
+/** Returns true if an href points to a real article (not a namespace page). */
+function isArticleLink(href: string | null): boolean {
+  if (!href) return false;
+  const match = href.match(/\/wiki\/([^#]*)/);
+  if (!match) return false;
+  return !match[1].includes(':');
+}
 
 const ACTION_TIMEOUT_MS = 30_000;
 
@@ -131,12 +142,36 @@ async function runActionLoop(page: Page, results: ActionResult[], navigateUrl: s
     }
 
     // 5. Click first article link (filter out meta pages like Help:, File:, etc.)
+    let clickSucceeded = false;
     {
       const r = await timeAction(async () => {
-        const link = await page.waitForSelector(ARTICLE_LINK, { timeout: 10_000 });
-        await link.click();
+        // Wait for any /wiki/ link to appear, then filter in JS for article
+        // links (no namespace colon after /wiki/). This handles relative,
+        // protocol-relative, and absolute https:// URL formats.
+        await page.waitForSelector(ARTICLE_LINK_SELECTOR, { timeout: 10_000 });
+        const links = await page.$$(ARTICLE_LINK_SELECTOR);
+        for (const link of links) {
+          const href = await link.getAttribute('href');
+          if (isArticleLink(href)) {
+            await link.click();
+            return;
+          }
+        }
+        throw new Error('No article body link found on page');
       });
+      clickSucceeded = r.success;
       results.push({ index: baseIdx + 5, type: 'click', durationMs: r.durationMs, success: r.success, error: r.error });
+    }
+
+    // If the click failed (e.g. stub article with no body links), skip the
+    // remaining actions that depend on having navigated to a new page.
+    // Without this, goBack navigates to a blank page and the final
+    // waitForSelector times out for 30s, inflating task time.
+    if (!clickSucceeded) {
+      for (const idx of [6, 7, 8, 9, 10]) {
+        results.push({ index: baseIdx + idx, type: idx <= 8 ? (idx === 6 || idx === 10 ? 'waitForSelector' : idx === 7 ? 'screenshot' : 'textContent') : 'goBack', durationMs: 0, success: false, error: 'skipped: click failed' });
+      }
+      continue;
     }
 
     // 6. Wait for #firstHeading on the new page

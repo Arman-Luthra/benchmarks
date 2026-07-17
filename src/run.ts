@@ -37,6 +37,7 @@ import type { StorageBenchmarkResult } from './storage/types.js';
 import type { SnapshotForkBenchmarkResult } from './storage/snapshot-fork-types.js';
 import type { DatasetPreset } from './storage/snapshot-fork-types.js';
 import type { BrowserBenchmarkResult } from './browser/types.js';
+import { ACTIONS_PER_SESSION } from './browser/throughput-types.js';
 import type { ThroughputBenchmarkResult, ThroughputTimingResult } from './browser/throughput-types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -409,8 +410,7 @@ async function runBrowserThroughput(toRun: typeof throughputProviders): Promise<
       console.log(`${r.provider}: SKIPPED (${r.skipReason})`);
       continue;
     }
-    const expectedActions = 50;
-    const fullSuccess = r.iterations.filter(i => !i.error && i.actionsCompleted === expectedActions).length;
+    const fullSuccess = r.iterations.filter(i => !i.error && i.actionsCompleted === ACTIONS_PER_SESSION).length;
     const total = r.iterations.length;
     const aps = r.summary.actionsPerSecond.median;
     const taskMed = r.summary.taskMs.median;
