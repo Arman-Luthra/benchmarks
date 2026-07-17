@@ -52,6 +52,7 @@ permissions:
 jobs:
   bench:
     name: Bench ${{ matrix.provider }}
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.mode != 'sandbox-dax' }}
     runs-on: namespace-profile-default
     timeout-minutes: 60
     strategy:
