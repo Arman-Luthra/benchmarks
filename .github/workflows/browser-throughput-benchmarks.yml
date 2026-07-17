@@ -42,11 +42,29 @@ jobs:
           urls=()
           for i in $(seq 1 "$count"); do
             # Follow Special:Random's redirect once to a concrete article URL.
-            url=$(curl -sL -A 'ComputeSDK-Benchmark' -o /dev/null -w '%{url_effective}' \
-              'https://en.wikipedia.org/wiki/Special:Random')
-            if [ -z "$url" ] || [[ "$url" == *"Special:Random"* ]]; then
-              url='https://en.wikipedia.org/wiki/Special:Random'
-            fi
+            # Retry up to 5 times until we find an article that has at least
+            # one article-body link (href containing "/wiki/" without a colon,
+            # which excludes namespace pages like Help:, File:, Special:).
+            # Stub articles without body links cause the click action to time
+            # out and skew throughput results.
+            for attempt in 1 2 3 4 5; do
+              url=$(curl -sL -A 'ComputeSDK-Benchmark' -o /dev/null -w '%{url_effective}' \
+                'https://en.wikipedia.org/wiki/Special:Random')
+              if [ -z "$url" ] || [[ "$url" == *"Special:Random"* ]]; then
+                url='https://en.wikipedia.org/wiki/Special:Random'
+                break
+              fi
+              # Fetch the article HTML and check for article-body links.
+              # The benchmark selects #mw-content-text a[href*="/wiki/"] and
+              # filters in JS for links without a namespace colon after /wiki/.
+              # Body links appear as protocol-relative (//en.wikipedia.org/wiki/)
+              # or absolute (https://en.wikipedia.org/wiki/) URLs.
+              html=$(curl -sL -A 'ComputeSDK-Benchmark' "$url")
+              if echo "$html" | grep -oP 'href="[^"]*"' \
+                 | grep -qP '/wiki/[^:]*$'; then
+                break
+              fi
+            done
             urls+=("$url")
           done
           # Emit as a newline-delimited multiline output. Pure bash — avoids a
