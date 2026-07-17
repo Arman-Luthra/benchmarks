@@ -10,8 +10,8 @@ const BENCH_SCRIPT_URL = 'https://raw.githubusercontent.com/anomalyco/opencode/p
 // Target: 8 vCPU, 16 GiB RAM.
 // Each provider uses different parameter names and units, so we map per-provider.
 // Providers not listed here don't support CPU/memory configuration at sandbox creation time.
+// Note: E2B sets CPU/memory at template build time, not at sandbox creation.
 const DAX_RESOURCE_OPTIONS: Record<string, Record<string, any>> = {
-  e2b:          { cpuCount: 8, memoryMB: 16384 },
   modal:        { cpu: 4, cpuLimit: 4, memoryMiB: 16384 }, // Modal: 1 core = 2 vCPUs, so 4 cores = 8 vCPUs
   tensorlake:   { cpus: 8, memoryMb: 16384 },
   isorun:       { vcpus: 8, memMiB: 16384 },
