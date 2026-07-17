@@ -162,8 +162,8 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-  workload-bench:
-    name: Bench ${{ matrix.provider }} sandbox-dax
+  dax:
+    name: Dax ${{ matrix.provider }}
     if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.mode == '' || github.event.inputs.mode == 'sandbox-dax' }}
     runs-on: namespace-profile-default
     timeout-minutes: 60
@@ -254,7 +254,7 @@ jobs:
   collect:
     name: Collect Results
     runs-on: namespace-profile-default
-    needs: [bench, workload-bench]
+    needs: [bench, dax]
     if: always()
     steps:
       - uses: actions/checkout@v4
