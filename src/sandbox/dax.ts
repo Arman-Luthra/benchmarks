@@ -6,6 +6,28 @@ import { withTimeout } from '../util/timeout.js';
 
 const BENCH_SCRIPT_URL = 'https://raw.githubusercontent.com/anomalyco/opencode/provider-benchmark/script/provider-benchmark.sh';
 
+// Standardized resource sizing for fair comparison across providers.
+// Target: 8 vCPU, 16 GiB RAM.
+// Each provider uses different parameter names and units, so we map per-provider.
+// Providers not listed here don't support CPU/memory configuration at sandbox creation time.
+const DAX_RESOURCE_OPTIONS: Record<string, Record<string, any>> = {
+  e2b:          { cpuCount: 8, memoryMB: 16384 },
+  modal:        { cpu: 4, cpuLimit: 4, memoryMiB: 16384 }, // Modal: 1 core = 2 vCPUs, so 4 cores = 8 vCPUs
+  tensorlake:   { cpus: 8, memoryMb: 16384 },
+  isorun:       { vcpus: 8, memMiB: 16384 },
+  runloop:      { customCpuCores: 8, customMemoryGb: 16 },
+  daytona:      { resources: { cpu: 8, memory: 16 } },     // memory in GiB
+  upstash:      { size: 'large' },                          // large = 8 cores, 16 GB
+  vercel:       { resources: { vcpus: 8 } },               // no memory control
+  blaxel:       { memory: 16384 },                          // CPU derived: cores = memory_MB / 2048 = 8
+};
+
+function getSandboxOptionsWithResources(providerName: string, baseOptions?: Record<string, any>): Record<string, any> {
+  const resourceOpts = DAX_RESOURCE_OPTIONS[providerName];
+  if (!resourceOpts) return baseOptions ?? {};
+  return { ...baseOptions, ...resourceOpts };
+}
+
 export interface DaxTimingResult {
   totalMs: number;
   phasesCompleted?: number;
@@ -74,7 +96,7 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
     let sandbox: any = null;
 
     try {
-      sandbox = await withTimeout(compute.sandbox.create(sandboxOptions), timeout, 'Sandbox creation timed out');
+      sandbox = await withTimeout(compute.sandbox.create(getSandboxOptionsWithResources(name, sandboxOptions)), timeout, 'Sandbox creation timed out');
       const result = await runDaxIteration(sandbox, name, timeout);
       results.push(result);
       if (result.error) {
