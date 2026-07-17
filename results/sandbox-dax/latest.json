@@ -1,0 +1,1447 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-07-17T17:22:06.994Z",
+  "config": {
+    "mode": "sandbox-dax"
+  },
+  "results": [
+    {
+      "provider": "archil",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 8689.02,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 8618,
+          "error": "Script exited with code 1: main: line 102: /usr/local/bin/node: cannot execute binary file: Exec format error"
+        },
+        {
+          "totalMs": 8229.21,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 8164,
+          "error": "Script exited with code 1: main: line 102: /usr/local/bin/node: cannot execute binary file: Exec format error"
+        },
+        {
+          "totalMs": 7113.08,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 7044,
+          "error": "Script exited with code 1: main: line 102: /usr/local/bin/node: cannot execute binary file: Exec format error"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 8229.21,
+          "p95": 8689.02,
+          "p99": 8689.02
+        },
+        "prepareMs": {
+          "median": 8164,
+          "p95": 8618,
+          "p99": 8618
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "beam",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 8.57,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 5.35,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 6.92,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "blaxel",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 6.69,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 6.86,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 7.55,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "cloud-run",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 21.46,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 57.71,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 15.76,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "cloudflare",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 1830.92,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "prepare: root_or_sudo_required"
+        },
+        {
+          "totalMs": 2500.09,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "prepare: root_or_sudo_required"
+        },
+        {
+          "totalMs": 2602.42,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "prepare: root_or_sudo_required"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "codesandbox",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 11445.43,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 449726037,
+          "error": "Script exited with code 1: W: An error occurred during the signature verification. The repository is not updated and the previous index files will be used. GPG error: https://dl.yarnpkg.com/debian stable InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 62D54FD4003F6525 | W: Failed to fetch https://dl.yarnpkg.com/debian/dists/stable/InRelease  The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 62D54FD4003F6525 | W: Some index files failed to download. They have been ignored, or old ones used instead."
+        },
+        {
+          "totalMs": 10574.76,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 449739756,
+          "error": "Script exited with code 1: W: An error occurred during the signature verification. The repository is not updated and the previous index files will be used. GPG error: https://dl.yarnpkg.com/debian stable InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 62D54FD4003F6525 | W: Failed to fetch https://dl.yarnpkg.com/debian/dists/stable/InRelease  The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 62D54FD4003F6525 | W: Some index files failed to download. They have been ignored, or old ones used instead."
+        },
+        {
+          "totalMs": 13081.91,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 12829,
+          "error": "Script exited with code 1: W: An error occurred during the signature verification. The repository is not updated and the previous index files will be used. GPG error: https://dl.yarnpkg.com/debian stable InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 62D54FD4003F6525 | W: Failed to fetch https://dl.yarnpkg.com/debian/dists/stable/InRelease  The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 62D54FD4003F6525 | W: Some index files failed to download. They have been ignored, or old ones used instead."
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 11445.43,
+          "p95": 13081.91,
+          "p99": 13081.91
+        },
+        "prepareMs": {
+          "median": 449726037,
+          "p95": 449739756,
+          "p99": 449739756
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "createos",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 17591.8,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 17458,
+          "error": "Script exited with code 1: Traceback (most recent call last): |   File \"<string>\", line 1, in <module> | ModuleNotFoundError: No module named 'setuptools'"
+        },
+        {
+          "totalMs": 14737.04,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 14604,
+          "error": "Script exited with code 1: Traceback (most recent call last): |   File \"<string>\", line 1, in <module> | ModuleNotFoundError: No module named 'setuptools'"
+        },
+        {
+          "totalMs": 17730.97,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 17601,
+          "error": "Script exited with code 1: Traceback (most recent call last): |   File \"<string>\", line 1, in <module> | ModuleNotFoundError: No module named 'setuptools'"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 17591.8,
+          "p95": 17730.97,
+          "p99": 17730.97
+        },
+        "prepareMs": {
+          "median": 17458,
+          "p95": 17601,
+          "p99": 17601
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "daytona",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 9409.09,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 9360,
+          "error": "Script exited with code 1"
+        },
+        {
+          "totalMs": 17582.44,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 17392,
+          "error": "Script exited with code 1"
+        },
+        {
+          "totalMs": 9017.16,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 8970,
+          "error": "Script exited with code 1"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 9409.09,
+          "p95": 17582.44,
+          "p99": 17582.44
+        },
+        "prepareMs": {
+          "median": 9360,
+          "p95": 17392,
+          "p99": 17392
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "declaw",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: HTTP 403: "
+        },
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: HTTP 403: "
+        },
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: HTTP 403: "
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "e2b",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 18186.59,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 11637,
+          "cacheClearMs": 101,
+          "bunDownloadMs": 625,
+          "bunUnpackMs": 743,
+          "cloneMs": 3026,
+          "installMs": 1386,
+          "typecheckMs": 38,
+          "diskAfterClone": 349997568,
+          "diskAfterInstall": 353413632,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 6.1.158+",
+          "logicalCpus": "2",
+          "cpuModel": "Intel(R) Xeon(R) Processor @ 2.60GHz",
+          "memoryKib": "489544",
+          "error": "Script exited with code 1: error: Cannot run \"/tmp/opencode-provider-benchmark/repo/turbo.json\" | note: Bun cannot run json files directly | error: script \"typecheck\" exited with code 1"
+        },
+        {
+          "totalMs": 17642.52,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 11742,
+          "cacheClearMs": 94,
+          "bunDownloadMs": 618,
+          "bunUnpackMs": 757,
+          "cloneMs": 3206,
+          "installMs": 794,
+          "typecheckMs": 26,
+          "diskAfterClone": 350001664,
+          "diskAfterInstall": 350579200,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 6.1.158+",
+          "logicalCpus": "2",
+          "cpuModel": "Intel(R) Xeon(R) Processor @ 2.60GHz",
+          "memoryKib": "489544",
+          "error": "Script exited with code 1: error: Cannot run \"/tmp/opencode-provider-benchmark/repo/turbo.json\" | note: Bun cannot run json files directly | error: script \"typecheck\" exited with code 1"
+        },
+        {
+          "totalMs": 18916.09,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 12092,
+          "cacheClearMs": 132,
+          "bunDownloadMs": 609,
+          "bunUnpackMs": 749,
+          "cloneMs": 3273,
+          "installMs": 1627,
+          "typecheckMs": 26,
+          "diskAfterClone": 350001664,
+          "diskAfterInstall": 351791616,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 6.1.158+",
+          "logicalCpus": "2",
+          "cpuModel": "Intel(R) Xeon(R) Processor @ 2.60GHz",
+          "memoryKib": "489544",
+          "error": "Script exited with code 1: error: Cannot run \"/tmp/opencode-provider-benchmark/repo/turbo.json\" | note: Bun cannot run json files directly | error: script \"typecheck\" exited with code 1"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 18186.59,
+          "p95": 18916.09,
+          "p99": 18916.09
+        },
+        "prepareMs": {
+          "median": 11742,
+          "p95": 12092,
+          "p99": 12092
+        },
+        "bunDownloadMs": {
+          "median": 618,
+          "p95": 625,
+          "p99": 625
+        },
+        "bunUnpackMs": {
+          "median": 749,
+          "p95": 757,
+          "p99": 757
+        },
+        "cloneMs": {
+          "median": 3206,
+          "p95": 3273,
+          "p99": 3273
+        },
+        "installMs": {
+          "median": 1386,
+          "p95": 1627,
+          "p99": 1627
+        },
+        "typecheckMs": {
+          "median": 26,
+          "p95": 38,
+          "p99": 38
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "hopx",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: timeout of 60000ms exceeded"
+        },
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 124: \nCommand timed out after 30 seconds"
+        },
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: timeout of 60000ms exceeded"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "isorun",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 3.83,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 3.85,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 4.32,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "lightning",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: Lightning API error 403: <!DOCTYPE html>\n<html>\n  <head>\n    <style>body {\n    background-color: #1c1c1c;\n}\n\n.element-other {\n    /* background-color: #ffffff; */\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    width: 100%;\n}\n\n.element-other .div {\n    /* background-color: #ffffff; */\n}\n\n.element-other .empty-state {\n    display: flex;\n    flex-direction: column;\n    width: 1280px;\n    align-items: center;\n    justify-content: center;\n    padding: 16px;\n    position: relative;\n    top: 205px;\n}\n\n.element-other .media {\n    display: inline-flex;\n    align-items: flex-start;\n    position: relative;\n    flex: 0 0 auto;\n    border-radius: 6px;\n    overflow: hidden;\n}\n\n.element-other .empty-state-image {\n    position: relative;\n    width: 144px;\n    height: 144px;\n    object-fit: cover;\n}\n\n.element-other .content {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 16px;\n    position: relative;\n    align-self: stretch;\n    width: 100%;\n    flex: 0 0 auto;\n    margin-top: 8px;\n}\n\n.element-other .text {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    gap: 4px;\n    position: relative;\n    align-self: stretch;\n    width: 100%;\n    flex: 0 0 auto;\n}\n\n.element-other .element-heading {\n    position: relative;\n    align-self: stretch;\n    margin-top: -1px;\n    font-family: \"Inter-SemiBold\", Helvetica;\n    font-weight: 600;\n    color: #fafafa;\n    font-size: 32px;\n    text-align: center;\n    letter-spacing: -0.8px;\n    line-height: normal;\n}\n\n.element-other .frame {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 4px;\n    position: relative;\n    flex: 0 0 auto;\n    max-width: 500px;\n    flex-direction: column;\n    gap: 4px;\n    /* Adjust the maximum width as needed for your design. */\n}\n\n.element-other .element-label {\n    position: relative;\n    width: fit-content;\n    font-family: \"Inter\", Helvetica;\n    font-weight: 400;\n    color: #b5b5b5;\n    font-size: 16px;\n    text-align: center;\n    letter-spacing: -0.32px;\n    line-height: normal;\n    word-wrap: break-word;\n    /* This allows long words to be broken and wrapped to the next line if they don't fit the container's width. */\n    white-space: normal;\n    margin-bottom: 8px;\n    /* This sets the white-space handling to wrap text as needed. */\n}\n\n.element-other .element-label-second-line {\n    position: relative;\n    width: fit-content;\n    font-family: \"Inter\", Helvetica;\n    font-weight: 400;\n    color: #b5b5b5;\n    font-size: 16px;\n    text-align: center;\n    letter-spacing: -0.32px;\n    line-height: normal;\n    word-wrap: break-word;\n    /* This allows long words to be broken and wrapped to the next line if they don't fit the container's width. */\n    white-space: normal;\n    margin: 0;\n    /* This sets the white-space handling to wrap text as needed. */\n}\n\n.element-other .link {\n    display: inline-flex;\n    gap: 8px;\n    position: relative;\n    flex: 0 0 auto;\n}\n\n.element-other .text-link {\n    position: relative;\n    width: fit-content;\n    margin-top: -1px;\n    font-family: \"Inter-Regular\", Helvetica;\n    font-weight: 400;\n    color: #4f00ba;\n    text-align: center;\n    letter-spacing: -0.32px;\n    text-decoration: none;\n    line-height: normal;\n    word-wrap: break-word;\n    white-space: normal;\n}\n\n/* Style for the line break */\n.line-break {\n    position: fixed;\n    left: 20%;\n    bottom: 5%;\n    width: 60%;\n    border: none;\n    border-top: 1px solid #868689;\n    /* Light gray color for the line */\n    margin: 0;\n    padding: 0;\n}\n\n/* Style for the link */\n.twitter-link {\n    color: #fafafafa;\n}</style>\n  </head>\n\n  <body>\n    <div class=\"element-other\">\n      <div class=\"div\">\n        <div class=\"empty-state\">\n          <div class=\"media\">\n            <img alt=\"\" class=\"empty-state-image\" src=\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCTxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF83MzAyXzExNzQwNikiPgoJPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAxXzczMDJfMTE3NDA2KSI+Cgk8cGF0aCBvcGFjaXR5PSIwLjI3IiBkPSJNNDEuMjYyMiAzNy44NTM1VjM4Ljc3NzZDNDEuMjYyMiA0My4yNTQ3IDM3LjYyMTEgNDYuODk1OCAzMy4xNDQgNDYuODk1OEMyOC42NjY4IDQ2Ljg5NTggMjUuMDI1NyA0My4yNTQ3IDI1LjAyNTcgMzguNzc3NlYzNy44NTM1QzI1LjAyNTcgMzcuMjE1NSAyNS41NDI3IDM2LjY4NzUgMjYuMTkxNyAzNi42ODc1SDQwLjA5NjJDNDAuNzM0MiAzNi42ODc1IDQxLjI2MjIgMzcuMjA0NSA0MS4yNjIyIDM3Ljg1MzVWMzcuODUzNVoiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIG9wYWNpdHk9IjAuMjciIGQ9Ik02OS45OTUxIDM3Ljg2NTNWMzguNzg5M0M2OS45OTUxIDQzLjI2NjQgNjYuMzU0IDQ2LjkwNzUgNjEuODc2OSA0Ni45MDc1QzU3LjM5OTcgNDYuOTA3NSA1My43NTg2IDQzLjI2NjQgNTMuNzU4NiAzOC43ODkzVjM3Ljg2NTNDNTMuNzU4NiAzNy4yMjcyIDU0LjI3NTYgMzYuNjk5MiA1NC45MjQ2IDM2LjY5OTJINjguODI5MUM2OS40NjcxIDM2LjY5OTIgNjkuOTk1MSAzNy4yMTYyIDY5Ljk5NTEgMzcuODY1M1oiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIGQ9Ik03MC45NDEgMzEuNzM3M0g1Mi44MzQ0QzUwLjc4ODQgMzEuNzM3MyA0OS4wOTQzIDM0LjM3NzQgNDguODUyMyAzNi4zNTc0SDQ2LjE5MDJDNDUuOTQ4MiAzNC4zNzc0IDQ0LjI1NDIgMzEuNzM3MyA0Mi4yMDgxIDMxLjczNzNIMjQuMTAxNkMyMS44OTA1IDMxLjczNzMgMjAuMDg2NCAzMy41NDE0IDIwLjA4NjQgMzUuNzUyNFYzOS4zNDk1QzIwLjA4NjQgNDYuMjM1OCAyNS42ODU2IDUxLjg0NTkgMzIuNTgyOCA1MS44NDU5SDMzLjcyNjlDMzkuODc2IDUxLjg0NTkgNDUuMDAyMiA0Ny4zNzk4IDQ2LjAzNjIgNDEuNTE2Nkg0OS4wMDYzQzUwLjAyOTQgNDcuMzc5OCA1NS4xNTU1IDUxLjg0NTkgNjEuMzE1NyA1MS44NDU5SDYyLjQ1OTdDNjkuMzQ2IDUxLjg0NTkgNzQuOTU2MSA0Ni4yNDY4IDc0Ljk1NjEgMzkuMzQ5NVYzNS43NTI0Qzc0Ljk1NjEgMzMuNTQxNCA3My4xNTIxIDMxLjczNzMgNzAuOTQxIDMxLjczNzNWMzEuNzM3M1pNNDIuOTIzMSAzNi45MDc1VjM5LjM0OTVDNDIuOTIzMSA0NC40MjA3IDM4Ljc5OCA0OC41NDU4IDMzLjcyNjkgNDguNTQ1OEgzMi41ODI4QzI3LjUxMTcgNDguNTQ1OCAyMy4zODY1IDQ0LjQyMDcgMjMuMzg2NSAzOS4zNDk1VjM1Ljc1MjRDMjMuMzg2NSAzNS4zNTY0IDIzLjcwNTUgMzUuMDM3NCAyNC4xMDE2IDM1LjAzNzRINDIuMjA4MUM0Mi42MDQxIDM1LjAzNzQgNDIuOTIzMSAzNS4zNTY0IDQyLjkyMzEgMzUuNzUyNFYzNi45MDc1VjM2LjkwNzVaTTcxLjY1NiAzOS4zNDk1QzcxLjY1NiA0NC40MjA3IDY3LjUzMDkgNDguNTQ1OCA2Mi40NTk3IDQ4LjU0NThINjEuMzE1N0M1Ni4yNDQ2IDQ4LjU0NTggNTIuMTE5NCA0NC40MjA3IDUyLjExOTQgMzkuMzQ5NVYzNS43NTI0QzUyLjExOTQgMzUuMzU2NCA1Mi40Mzg0IDM1LjAzNzQgNTIuODM0NCAzNS4wMzc0SDcwLjk0MUM3MS4zMzcgMzUuMDM3NCA3MS42NTYgMzUuMzU2NCA3MS42NTYgMzUuNzUyNFYzOS4zNDk1VjM5LjM0OTVaIiBmaWxsPSJ1cmwoI3BhaW50Ml9saW5lYXJfNzMwMl8xMTc0MDYpIi8+Cgk8cGF0aCBkPSJNODUuNzkxNyA0My4yMzMxQzg2LjI1MzcgNDEuNjM4IDg2LjQ4NDcgMzkuOTc3IDg2LjQ4NDcgMzguMjkzOUM4Ni40ODQ3IDI4LjQ1OTYgNzguNDg3NSAyMC40NjI0IDY4LjY1MzIgMjAuNDYyNEM2NS45MzYxIDIwLjQ2MjQgNjMuMjYzIDIxLjA4OTQgNjAuODIwOSAyMi4yODg0QzU2LjczOTggMTQuMTU5MiA0OC40Njc1IDkgMzkuMjQ5MiA5QzI1LjkyNzggOSAxNS4wOTI1IDE5LjgzNTMgMTUuMDkyNSAzMy4xNTY4QzE1LjA5MjUgMzMuNTQxOCAxNS4wOTI1IDMzLjkzNzggMTUuMTI1NSAzNC4zNDQ4QzYuNjQ0MjEgMzUuMTU4OCAwIDQyLjMyIDAgNTEuMDEwM0MwIDYwLjIzOTYgNy41MTMyNCA2Ny43NTI4IDE2Ljc0MjUgNjcuNzUyOEg4My42NDY2QzkwLjQ1NTggNjcuNzUyOCA5NiA2Mi4yMDg3IDk2IDU1LjM5OTVDOTYgNDkuMzE2MyA5MS41ODg5IDQ0LjI1NjEgODUuNzkxNyA0My4yMzMxVjQzLjIzMzFaTTgzLjY0NjYgNjQuNDUyN0gxNi43NDI1QzkuMzI4MjkgNjQuNDUyNyAzLjMwMDEgNTguNDI0NSAzLjMwMDEgNTEuMDEwM0MzLjMwMDEgNDMuNTk2MSA5LjMyODI5IDM3LjU2NzkgMTYuNzIwNSAzNy41Njc5TDE4Ljc5OTYgMzcuNjExOUwxOC41Njg2IDM1LjczMDhDMTguNDQ3NiAzNC43NjI4IDE4LjM5MjYgMzMuOTQ4OCAxOC4zOTI2IDMzLjE2NzhDMTguMzkyNiAyMS42NjE0IDI3Ljc1MzkgMTIuMzExMSAzOS4yNDkyIDEyLjMxMTFDNDcuNzMwNSAxMi4zMTExIDU1LjMwOTcgMTcuMzkzMyA1OC41NDM4IDI1LjI0NzVMNTkuMjkxOSAyNy4wNjI2TDYwLjk1MjkgMjYuMDE3NUM2My4yNzQgMjQuNTU0NSA2NS45MzYxIDIzLjc4NDUgNjguNjY0MSAyMy43ODQ1Qzc2LjY3MjQgMjMuNzg0NSA4My4xOTU2IDMwLjI5NjcgODMuMTk1NiAzOC4zMTU5QzgzLjE5NTYgNDAuMzA3IDgyLjc5OTYgNDIuMjQzIDgyLjAwNzYgNDQuMDY5MUw4MC45ODQ1IDQ2LjQzNDJMODMuNTU4NiA0Ni4zNzkySDgzLjc0NTZDODguNjk1OCA0Ni40MTIyIDkyLjY5OTkgNTAuNDYwMyA5Mi42OTk5IDU1LjQyMTVDOTIuNjk5OSA2MC4zODI2IDg4LjY0MDggNjQuNDc0NyA4My42NDY2IDY0LjQ3NDdWNjQuNDUyN1oiIGZpbGw9InVybCgjcGFpbnQzX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIGQ9Ik00Ny41MjEzIDU5LjM0ODVDNTAuMTgzNCA1OS4zNDg1IDUyLjMyODQgNTYuODE4NCA1Mi4zMjg0IDUzLjY5NDNINDIuNzAzMUM0Mi43MDMxIDU2LjgxODQgNDQuODU5MiA1OS4zNDg1IDQ3LjUxMDMgNTkuMzQ4NUg0Ny41MjEzWiIgZmlsbD0idXJsKCNwYWludDRfbGluZWFyXzczMDJfMTE3NDA2KSIvPgoJPHBhdGggb3BhY2l0eT0iMC4yNyIgZD0iTTM3LjM1NzEgNjcuNzUzMkg2MS44ODc5TDU0LjU1MDYgNzQuMjU0NEM1NC4yMDk2IDc0LjkxNDQgNTQuNjkzNiA3NS42OTU0IDU1LjQzMDcgNzUuNjk1NEg2Mi4wODU5QzYzLjA0MjkgNzUuNjk1NCA2My40Mzg5IDc2LjkxNjUgNjIuNjY4OSA3Ny40Nzc1TDM1LjQ0MyA5Ny40NTQxQzM0LjYyOSA5OC4wNDgxIDMzLjU0IDk3LjE5MDEgMzMuOTU4IDk2LjI1NTFMNDAuMTczMiA4Mi4xMzA2QzQwLjQ1OTIgODEuNDgxNiAzOS45ODYyIDgwLjc0NDYgMzkuMjcxMiA4MC43NDQ2SDMwLjQxNTlDMjkuNzExOSA4MC43NDQ2IDI5LjIzODggODAuMDI5NiAyOS41MDI5IDc5LjM4MDZMMzcuMzc5MSA2Ny43NDIyTDM3LjM1NzEgNjcuNzUzMloiIGZpbGw9InVybCgjcGFpbnQ1X2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTwvZz4KCTwvZz4KCTxkZWZzPgoJPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzczMDJfMTE3NDA2IiB4MT0iMjUuMDQ3NyIgeTE9IjQxLjc5MTciIHgyPSI0MS4yNzMyIiB5Mj0iNDEuNzkxNyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgoJPHN0b3Agc3RvcC1jb2xvcj0iI0I4MjlGRiIvPgoJPHN0b3Agb2Zmc2V0PSIwLjUzIiBzdG9wLWNvbG9yPSIjNzkyRUU1Ii8+Cgk8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2MjRFRkYiLz4KCTwvbGluZWFyR3JhZGllbnQ+Cgk8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MV9saW5lYXJfNzMwMl8xMTc0MDYiIHgxPSI1My43Njk2IiB5MT0iOS4wMDAzNCIgeDI9IjY5Ljk5NTEiIHkyPSI5LjAwMDM0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+Cgk8c3RvcCBzdG9wLWNvbG9yPSIjQjgyOUZGIi8+Cgk8c3RvcCBvZmZzZXQ9IjAuNTMiIHN0b3AtY29sb3I9IiM3OTJFRTUiLz4KCTxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzYyNEVGRiIvPgoJPC9saW5lYXJHcmFkaWVudD4KCTxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQyX2xpbmVhcl83MzAyXzExNzQwNiIgeDE9IjQ3Ljk3MjMiIHkxPSI3Ni45NTk3IiB4Mj0iNDcuMTkxMyIgeTI9IjguNjM2NTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KCTxzdG9wIHN0b3AtY29sb3I9IiNCODI5RkYiLz4KCTxzdG9wIG9mZnNldD0iMC41MyIgc3RvcC1jb2xvcj0iIzc5MkVFNSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjI0RUZGIi8+Cgk8L2xpbmVhckdyYWRpZW50PgoJPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDNfbGluZWFyXzczMDJfMTE3NDA2IiB4MT0iNDguMjY5NSIgeTE9Ijc2Ljk0OTEiIHgyPSI0Ny40ODg1IiB5Mj0iOC42MzY5OSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgoJPHN0b3Agc3RvcC1jb2xvcj0iI0I4MjlGRiIvPgoJPHN0b3Agb2Zmc2V0PSIwLjUzIiBzdG9wLWNvbG9yPSIjNzkyRUU1Ii8+Cgk8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2MjRFRkYiLz4KCTwvbGluZWFyR3JhZGllbnQ+Cgk8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50NF9saW5lYXJfNzMwMl8xMTc0MDYiIHgxPSI0Ny43ODUzIiB5MT0iNzYuOTYwMSIgeDI9IjQ3LjAwNDMiIHkyPSI4LjYzNjkzIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+Cgk8c3RvcCBzdG9wLWNvbG9yPSIjQjgyOUZGIi8+Cgk8c3RvcCBvZmZzZXQ9IjAuNTMiIHN0b3AtY29sb3I9IiM3OTJFRTUiLz4KCTxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzYyNEVGRiIvPgoJPC9saW5lYXJHcmFkaWVudD4KCTxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQ1X2xpbmVhcl83MzAyXzExNzQwNiIgeDE9IjQ2LjA0NzQiIHkxPSI5NS4zMDkxIiB4Mj0iNDYuNDk4NCIgeTI9IjU1Ljg2MTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KCTxzdG9wIHN0b3AtY29sb3I9IiNCODI5RkYiLz4KCTxzdG9wIG9mZnNldD0iMC41MyIgc3RvcC1jb2xvcj0iIzc5MkVFNSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjI0RUZGIi8+Cgk8L2xpbmVhckdyYWRpZW50PgoJPGNsaXBQYXRoIGlkPSJjbGlwMF83MzAyXzExNzQwNiI+Cgk8cGF0aCBkPSJNMCA2QzAgMi42ODYyOSAyLjY4NjI5IDAgNiAwSDkwQzkzLjMxMzcgMCA5NiAyLjY4NjI5IDk2IDZWOTBDOTYgOTMuMzEzNyA5My4zMTM3IDk2IDkwIDk2SDZDMi42ODYyOSA5NiAwIDkzLjMxMzcgMCA5MFY2WiIgZmlsbD0id2hpdGUiLz4KCTwvY2xpcFBhdGg+Cgk8Y2xpcFBhdGggaWQ9ImNsaXAxXzczMDJfMTE3NDA2Ij4KCTxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI4OC42NjI4IiBmaWxsPSJ3aGl0ZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCA5KSIvPgoJPC9jbGlwUGF0aD4KCTwvZGVmcz4KCTwvc3ZnPgo=\" />\n          </div>\n          <div class=\"content\">\n            <div class=\"text\">\n              <div class=\"element-heading\">Coming soon</div>\n            </div>\n            <div class=\"frame\">\n              <p class=\"element-label\">Lightning AI is not available in your region, yet.</p>\n              <p class=\"element-label-second-line\">\n                <a href=\"https://x.com/LightningAI\" target=\"_blank\" class=\"twitter-link\" rel=\"noreferrer\">\n                  Follow us on Twitter\n                </a>\n                <span style=\"margin-left: 4px\"> for future announcements! </span>\n              </p>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        },
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: Lightning API error 403: <!DOCTYPE html>\n<html>\n  <head>\n    <style>body {\n    background-color: #1c1c1c;\n}\n\n.element-other {\n    /* background-color: #ffffff; */\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    width: 100%;\n}\n\n.element-other .div {\n    /* background-color: #ffffff; */\n}\n\n.element-other .empty-state {\n    display: flex;\n    flex-direction: column;\n    width: 1280px;\n    align-items: center;\n    justify-content: center;\n    padding: 16px;\n    position: relative;\n    top: 205px;\n}\n\n.element-other .media {\n    display: inline-flex;\n    align-items: flex-start;\n    position: relative;\n    flex: 0 0 auto;\n    border-radius: 6px;\n    overflow: hidden;\n}\n\n.element-other .empty-state-image {\n    position: relative;\n    width: 144px;\n    height: 144px;\n    object-fit: cover;\n}\n\n.element-other .content {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 16px;\n    position: relative;\n    align-self: stretch;\n    width: 100%;\n    flex: 0 0 auto;\n    margin-top: 8px;\n}\n\n.element-other .text {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    gap: 4px;\n    position: relative;\n    align-self: stretch;\n    width: 100%;\n    flex: 0 0 auto;\n}\n\n.element-other .element-heading {\n    position: relative;\n    align-self: stretch;\n    margin-top: -1px;\n    font-family: \"Inter-SemiBold\", Helvetica;\n    font-weight: 600;\n    color: #fafafa;\n    font-size: 32px;\n    text-align: center;\n    letter-spacing: -0.8px;\n    line-height: normal;\n}\n\n.element-other .frame {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 4px;\n    position: relative;\n    flex: 0 0 auto;\n    max-width: 500px;\n    flex-direction: column;\n    gap: 4px;\n    /* Adjust the maximum width as needed for your design. */\n}\n\n.element-other .element-label {\n    position: relative;\n    width: fit-content;\n    font-family: \"Inter\", Helvetica;\n    font-weight: 400;\n    color: #b5b5b5;\n    font-size: 16px;\n    text-align: center;\n    letter-spacing: -0.32px;\n    line-height: normal;\n    word-wrap: break-word;\n    /* This allows long words to be broken and wrapped to the next line if they don't fit the container's width. */\n    white-space: normal;\n    margin-bottom: 8px;\n    /* This sets the white-space handling to wrap text as needed. */\n}\n\n.element-other .element-label-second-line {\n    position: relative;\n    width: fit-content;\n    font-family: \"Inter\", Helvetica;\n    font-weight: 400;\n    color: #b5b5b5;\n    font-size: 16px;\n    text-align: center;\n    letter-spacing: -0.32px;\n    line-height: normal;\n    word-wrap: break-word;\n    /* This allows long words to be broken and wrapped to the next line if they don't fit the container's width. */\n    white-space: normal;\n    margin: 0;\n    /* This sets the white-space handling to wrap text as needed. */\n}\n\n.element-other .link {\n    display: inline-flex;\n    gap: 8px;\n    position: relative;\n    flex: 0 0 auto;\n}\n\n.element-other .text-link {\n    position: relative;\n    width: fit-content;\n    margin-top: -1px;\n    font-family: \"Inter-Regular\", Helvetica;\n    font-weight: 400;\n    color: #4f00ba;\n    text-align: center;\n    letter-spacing: -0.32px;\n    text-decoration: none;\n    line-height: normal;\n    word-wrap: break-word;\n    white-space: normal;\n}\n\n/* Style for the line break */\n.line-break {\n    position: fixed;\n    left: 20%;\n    bottom: 5%;\n    width: 60%;\n    border: none;\n    border-top: 1px solid #868689;\n    /* Light gray color for the line */\n    margin: 0;\n    padding: 0;\n}\n\n/* Style for the link */\n.twitter-link {\n    color: #fafafafa;\n}</style>\n  </head>\n\n  <body>\n    <div class=\"element-other\">\n      <div class=\"div\">\n        <div class=\"empty-state\">\n          <div class=\"media\">\n            <img alt=\"\" class=\"empty-state-image\" src=\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCTxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF83MzAyXzExNzQwNikiPgoJPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAxXzczMDJfMTE3NDA2KSI+Cgk8cGF0aCBvcGFjaXR5PSIwLjI3IiBkPSJNNDEuMjYyMiAzNy44NTM1VjM4Ljc3NzZDNDEuMjYyMiA0My4yNTQ3IDM3LjYyMTEgNDYuODk1OCAzMy4xNDQgNDYuODk1OEMyOC42NjY4IDQ2Ljg5NTggMjUuMDI1NyA0My4yNTQ3IDI1LjAyNTcgMzguNzc3NlYzNy44NTM1QzI1LjAyNTcgMzcuMjE1NSAyNS41NDI3IDM2LjY4NzUgMjYuMTkxNyAzNi42ODc1SDQwLjA5NjJDNDAuNzM0MiAzNi42ODc1IDQxLjI2MjIgMzcuMjA0NSA0MS4yNjIyIDM3Ljg1MzVWMzcuODUzNVoiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIG9wYWNpdHk9IjAuMjciIGQ9Ik02OS45OTUxIDM3Ljg2NTNWMzguNzg5M0M2OS45OTUxIDQzLjI2NjQgNjYuMzU0IDQ2LjkwNzUgNjEuODc2OSA0Ni45MDc1QzU3LjM5OTcgNDYuOTA3NSA1My43NTg2IDQzLjI2NjQgNTMuNzU4NiAzOC43ODkzVjM3Ljg2NTNDNTMuNzU4NiAzNy4yMjcyIDU0LjI3NTYgMzYuNjk5MiA1NC45MjQ2IDM2LjY5OTJINjguODI5MUM2OS40NjcxIDM2LjY5OTIgNjkuOTk1MSAzNy4yMTYyIDY5Ljk5NTEgMzcuODY1M1oiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIGQ9Ik03MC45NDEgMzEuNzM3M0g1Mi44MzQ0QzUwLjc4ODQgMzEuNzM3MyA0OS4wOTQzIDM0LjM3NzQgNDguODUyMyAzNi4zNTc0SDQ2LjE5MDJDNDUuOTQ4MiAzNC4zNzc0IDQ0LjI1NDIgMzEuNzM3MyA0Mi4yMDgxIDMxLjczNzNIMjQuMTAxNkMyMS44OTA1IDMxLjczNzMgMjAuMDg2NCAzMy41NDE0IDIwLjA4NjQgMzUuNzUyNFYzOS4zNDk1QzIwLjA4NjQgNDYuMjM1OCAyNS42ODU2IDUxLjg0NTkgMzIuNTgyOCA1MS44NDU5SDMzLjcyNjlDMzkuODc2IDUxLjg0NTkgNDUuMDAyMiA0Ny4zNzk4IDQ2LjAzNjIgNDEuNTE2Nkg0OS4wMDYzQzUwLjAyOTQgNDcuMzc5OCA1NS4xNTU1IDUxLjg0NTkgNjEuMzE1NyA1MS44NDU5SDYyLjQ1OTdDNjkuMzQ2IDUxLjg0NTkgNzQuOTU2MSA0Ni4yNDY4IDc0Ljk1NjEgMzkuMzQ5NVYzNS43NTI0Qzc0Ljk1NjEgMzMuNTQxNCA3My4xNTIxIDMxLjczNzMgNzAuOTQxIDMxLjczNzNWMzEuNzM3M1pNNDIuOTIzMSAzNi45MDc1VjM5LjM0OTVDNDIuOTIzMSA0NC40MjA3IDM4Ljc5OCA0OC41NDU4IDMzLjcyNjkgNDguNTQ1OEgzMi41ODI4QzI3LjUxMTcgNDguNTQ1OCAyMy4zODY1IDQ0LjQyMDcgMjMuMzg2NSAzOS4zNDk1VjM1Ljc1MjRDMjMuMzg2NSAzNS4zNTY0IDIzLjcwNTUgMzUuMDM3NCAyNC4xMDE2IDM1LjAzNzRINDIuMjA4MUM0Mi42MDQxIDM1LjAzNzQgNDIuOTIzMSAzNS4zNTY0IDQyLjkyMzEgMzUuNzUyNFYzNi45MDc1VjM2LjkwNzVaTTcxLjY1NiAzOS4zNDk1QzcxLjY1NiA0NC40MjA3IDY3LjUzMDkgNDguNTQ1OCA2Mi40NTk3IDQ4LjU0NThINjEuMzE1N0M1Ni4yNDQ2IDQ4LjU0NTggNTIuMTE5NCA0NC40MjA3IDUyLjExOTQgMzkuMzQ5NVYzNS43NTI0QzUyLjExOTQgMzUuMzU2NCA1Mi40Mzg0IDM1LjAzNzQgNTIuODM0NCAzNS4wMzc0SDcwLjk0MUM3MS4zMzcgMzUuMDM3NCA3MS42NTYgMzUuMzU2NCA3MS42NTYgMzUuNzUyNFYzOS4zNDk1VjM5LjM0OTVaIiBmaWxsPSJ1cmwoI3BhaW50Ml9saW5lYXJfNzMwMl8xMTc0MDYpIi8+Cgk8cGF0aCBkPSJNODUuNzkxNyA0My4yMzMxQzg2LjI1MzcgNDEuNjM4IDg2LjQ4NDcgMzkuOTc3IDg2LjQ4NDcgMzguMjkzOUM4Ni40ODQ3IDI4LjQ1OTYgNzguNDg3NSAyMC40NjI0IDY4LjY1MzIgMjAuNDYyNEM2NS45MzYxIDIwLjQ2MjQgNjMuMjYzIDIxLjA4OTQgNjAuODIwOSAyMi4yODg0QzU2LjczOTggMTQuMTU5MiA0OC40Njc1IDkgMzkuMjQ5MiA5QzI1LjkyNzggOSAxNS4wOTI1IDE5LjgzNTMgMTUuMDkyNSAzMy4xNTY4QzE1LjA5MjUgMzMuNTQxOCAxNS4wOTI1IDMzLjkzNzggMTUuMTI1NSAzNC4zNDQ4QzYuNjQ0MjEgMzUuMTU4OCAwIDQyLjMyIDAgNTEuMDEwM0MwIDYwLjIzOTYgNy41MTMyNCA2Ny43NTI4IDE2Ljc0MjUgNjcuNzUyOEg4My42NDY2QzkwLjQ1NTggNjcuNzUyOCA5NiA2Mi4yMDg3IDk2IDU1LjM5OTVDOTYgNDkuMzE2MyA5MS41ODg5IDQ0LjI1NjEgODUuNzkxNyA0My4yMzMxVjQzLjIzMzFaTTgzLjY0NjYgNjQuNDUyN0gxNi43NDI1QzkuMzI4MjkgNjQuNDUyNyAzLjMwMDEgNTguNDI0NSAzLjMwMDEgNTEuMDEwM0MzLjMwMDEgNDMuNTk2MSA5LjMyODI5IDM3LjU2NzkgMTYuNzIwNSAzNy41Njc5TDE4Ljc5OTYgMzcuNjExOUwxOC41Njg2IDM1LjczMDhDMTguNDQ3NiAzNC43NjI4IDE4LjM5MjYgMzMuOTQ4OCAxOC4zOTI2IDMzLjE2NzhDMTguMzkyNiAyMS42NjE0IDI3Ljc1MzkgMTIuMzExMSAzOS4yNDkyIDEyLjMxMTFDNDcuNzMwNSAxMi4zMTExIDU1LjMwOTcgMTcuMzkzMyA1OC41NDM4IDI1LjI0NzVMNTkuMjkxOSAyNy4wNjI2TDYwLjk1MjkgMjYuMDE3NUM2My4yNzQgMjQuNTU0NSA2NS45MzYxIDIzLjc4NDUgNjguNjY0MSAyMy43ODQ1Qzc2LjY3MjQgMjMuNzg0NSA4My4xOTU2IDMwLjI5NjcgODMuMTk1NiAzOC4zMTU5QzgzLjE5NTYgNDAuMzA3IDgyLjc5OTYgNDIuMjQzIDgyLjAwNzYgNDQuMDY5MUw4MC45ODQ1IDQ2LjQzNDJMODMuNTU4NiA0Ni4zNzkySDgzLjc0NTZDODguNjk1OCA0Ni40MTIyIDkyLjY5OTkgNTAuNDYwMyA5Mi42OTk5IDU1LjQyMTVDOTIuNjk5OSA2MC4zODI2IDg4LjY0MDggNjQuNDc0NyA4My42NDY2IDY0LjQ3NDdWNjQuNDUyN1oiIGZpbGw9InVybCgjcGFpbnQzX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIGQ9Ik00Ny41MjEzIDU5LjM0ODVDNTAuMTgzNCA1OS4zNDg1IDUyLjMyODQgNTYuODE4NCA1Mi4zMjg0IDUzLjY5NDNINDIuNzAzMUM0Mi43MDMxIDU2LjgxODQgNDQuODU5MiA1OS4zNDg1IDQ3LjUxMDMgNTkuMzQ4NUg0Ny41MjEzWiIgZmlsbD0idXJsKCNwYWludDRfbGluZWFyXzczMDJfMTE3NDA2KSIvPgoJPHBhdGggb3BhY2l0eT0iMC4yNyIgZD0iTTM3LjM1NzEgNjcuNzUzMkg2MS44ODc5TDU0LjU1MDYgNzQuMjU0NEM1NC4yMDk2IDc0LjkxNDQgNTQuNjkzNiA3NS42OTU0IDU1LjQzMDcgNzUuNjk1NEg2Mi4wODU5QzYzLjA0MjkgNzUuNjk1NCA2My40Mzg5IDc2LjkxNjUgNjIuNjY4OSA3Ny40Nzc1TDM1LjQ0MyA5Ny40NTQxQzM0LjYyOSA5OC4wNDgxIDMzLjU0IDk3LjE5MDEgMzMuOTU4IDk2LjI1NTFMNDAuMTczMiA4Mi4xMzA2QzQwLjQ1OTIgODEuNDgxNiAzOS45ODYyIDgwLjc0NDYgMzkuMjcxMiA4MC43NDQ2SDMwLjQxNTlDMjkuNzExOSA4MC43NDQ2IDI5LjIzODggODAuMDI5NiAyOS41MDI5IDc5LjM4MDZMMzcuMzc5MSA2Ny43NDIyTDM3LjM1NzEgNjcuNzUzMloiIGZpbGw9InVybCgjcGFpbnQ1X2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTwvZz4KCTwvZz4KCTxkZWZzPgoJPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzczMDJfMTE3NDA2IiB4MT0iMjUuMDQ3NyIgeTE9IjQxLjc5MTciIHgyPSI0MS4yNzMyIiB5Mj0iNDEuNzkxNyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgoJPHN0b3Agc3RvcC1jb2xvcj0iI0I4MjlGRiIvPgoJPHN0b3Agb2Zmc2V0PSIwLjUzIiBzdG9wLWNvbG9yPSIjNzkyRUU1Ii8+Cgk8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2MjRFRkYiLz4KCTwvbGluZWFyR3JhZGllbnQ+Cgk8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MV9saW5lYXJfNzMwMl8xMTc0MDYiIHgxPSI1My43Njk2IiB5MT0iOS4wMDAzNCIgeDI9IjY5Ljk5NTEiIHkyPSI5LjAwMDM0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+Cgk8c3RvcCBzdG9wLWNvbG9yPSIjQjgyOUZGIi8+Cgk8c3RvcCBvZmZzZXQ9IjAuNTMiIHN0b3AtY29sb3I9IiM3OTJFRTUiLz4KCTxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzYyNEVGRiIvPgoJPC9saW5lYXJHcmFkaWVudD4KCTxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQyX2xpbmVhcl83MzAyXzExNzQwNiIgeDE9IjQ3Ljk3MjMiIHkxPSI3Ni45NTk3IiB4Mj0iNDcuMTkxMyIgeTI9IjguNjM2NTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KCTxzdG9wIHN0b3AtY29sb3I9IiNCODI5RkYiLz4KCTxzdG9wIG9mZnNldD0iMC41MyIgc3RvcC1jb2xvcj0iIzc5MkVFNSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjI0RUZGIi8+Cgk8L2xpbmVhckdyYWRpZW50PgoJPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDNfbGluZWFyXzczMDJfMTE3NDA2IiB4MT0iNDguMjY5NSIgeTE9Ijc2Ljk0OTEiIHgyPSI0Ny40ODg1IiB5Mj0iOC42MzY5OSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgoJPHN0b3Agc3RvcC1jb2xvcj0iI0I4MjlGRiIvPgoJPHN0b3Agb2Zmc2V0PSIwLjUzIiBzdG9wLWNvbG9yPSIjNzkyRUU1Ii8+Cgk8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2MjRFRkYiLz4KCTwvbGluZWFyR3JhZGllbnQ+Cgk8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50NF9saW5lYXJfNzMwMl8xMTc0MDYiIHgxPSI0Ny43ODUzIiB5MT0iNzYuOTYwMSIgeDI9IjQ3LjAwNDMiIHkyPSI4LjYzNjkzIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+Cgk8c3RvcCBzdG9wLWNvbG9yPSIjQjgyOUZGIi8+Cgk8c3RvcCBvZmZzZXQ9IjAuNTMiIHN0b3AtY29sb3I9IiM3OTJFRTUiLz4KCTxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzYyNEVGRiIvPgoJPC9saW5lYXJHcmFkaWVudD4KCTxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQ1X2xpbmVhcl83MzAyXzExNzQwNiIgeDE9IjQ2LjA0NzQiIHkxPSI5NS4zMDkxIiB4Mj0iNDYuNDk4NCIgeTI9IjU1Ljg2MTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KCTxzdG9wIHN0b3AtY29sb3I9IiNCODI5RkYiLz4KCTxzdG9wIG9mZnNldD0iMC41MyIgc3RvcC1jb2xvcj0iIzc5MkVFNSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjI0RUZGIi8+Cgk8L2xpbmVhckdyYWRpZW50PgoJPGNsaXBQYXRoIGlkPSJjbGlwMF83MzAyXzExNzQwNiI+Cgk8cGF0aCBkPSJNMCA2QzAgMi42ODYyOSAyLjY4NjI5IDAgNiAwSDkwQzkzLjMxMzcgMCA5NiAyLjY4NjI5IDk2IDZWOTBDOTYgOTMuMzEzNyA5My4zMTM3IDk2IDkwIDk2SDZDMi42ODYyOSA5NiAwIDkzLjMxMzcgMCA5MFY2WiIgZmlsbD0id2hpdGUiLz4KCTwvY2xpcFBhdGg+Cgk8Y2xpcFBhdGggaWQ9ImNsaXAxXzczMDJfMTE3NDA2Ij4KCTxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI4OC42NjI4IiBmaWxsPSJ3aGl0ZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCA5KSIvPgoJPC9jbGlwUGF0aD4KCTwvZGVmcz4KCTwvc3ZnPgo=\" />\n          </div>\n          <div class=\"content\">\n            <div class=\"text\">\n              <div class=\"element-heading\">Coming soon</div>\n            </div>\n            <div class=\"frame\">\n              <p class=\"element-label\">Lightning AI is not available in your region, yet.</p>\n              <p class=\"element-label-second-line\">\n                <a href=\"https://x.com/LightningAI\" target=\"_blank\" class=\"twitter-link\" rel=\"noreferrer\">\n                  Follow us on Twitter\n                </a>\n                <span style=\"margin-left: 4px\"> for future announcements! </span>\n              </p>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        },
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: Lightning API error 403: <!DOCTYPE html>\n<html>\n  <head>\n    <style>body {\n    background-color: #1c1c1c;\n}\n\n.element-other {\n    /* background-color: #ffffff; */\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    width: 100%;\n}\n\n.element-other .div {\n    /* background-color: #ffffff; */\n}\n\n.element-other .empty-state {\n    display: flex;\n    flex-direction: column;\n    width: 1280px;\n    align-items: center;\n    justify-content: center;\n    padding: 16px;\n    position: relative;\n    top: 205px;\n}\n\n.element-other .media {\n    display: inline-flex;\n    align-items: flex-start;\n    position: relative;\n    flex: 0 0 auto;\n    border-radius: 6px;\n    overflow: hidden;\n}\n\n.element-other .empty-state-image {\n    position: relative;\n    width: 144px;\n    height: 144px;\n    object-fit: cover;\n}\n\n.element-other .content {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 16px;\n    position: relative;\n    align-self: stretch;\n    width: 100%;\n    flex: 0 0 auto;\n    margin-top: 8px;\n}\n\n.element-other .text {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    gap: 4px;\n    position: relative;\n    align-self: stretch;\n    width: 100%;\n    flex: 0 0 auto;\n}\n\n.element-other .element-heading {\n    position: relative;\n    align-self: stretch;\n    margin-top: -1px;\n    font-family: \"Inter-SemiBold\", Helvetica;\n    font-weight: 600;\n    color: #fafafa;\n    font-size: 32px;\n    text-align: center;\n    letter-spacing: -0.8px;\n    line-height: normal;\n}\n\n.element-other .frame {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: 4px;\n    position: relative;\n    flex: 0 0 auto;\n    max-width: 500px;\n    flex-direction: column;\n    gap: 4px;\n    /* Adjust the maximum width as needed for your design. */\n}\n\n.element-other .element-label {\n    position: relative;\n    width: fit-content;\n    font-family: \"Inter\", Helvetica;\n    font-weight: 400;\n    color: #b5b5b5;\n    font-size: 16px;\n    text-align: center;\n    letter-spacing: -0.32px;\n    line-height: normal;\n    word-wrap: break-word;\n    /* This allows long words to be broken and wrapped to the next line if they don't fit the container's width. */\n    white-space: normal;\n    margin-bottom: 8px;\n    /* This sets the white-space handling to wrap text as needed. */\n}\n\n.element-other .element-label-second-line {\n    position: relative;\n    width: fit-content;\n    font-family: \"Inter\", Helvetica;\n    font-weight: 400;\n    color: #b5b5b5;\n    font-size: 16px;\n    text-align: center;\n    letter-spacing: -0.32px;\n    line-height: normal;\n    word-wrap: break-word;\n    /* This allows long words to be broken and wrapped to the next line if they don't fit the container's width. */\n    white-space: normal;\n    margin: 0;\n    /* This sets the white-space handling to wrap text as needed. */\n}\n\n.element-other .link {\n    display: inline-flex;\n    gap: 8px;\n    position: relative;\n    flex: 0 0 auto;\n}\n\n.element-other .text-link {\n    position: relative;\n    width: fit-content;\n    margin-top: -1px;\n    font-family: \"Inter-Regular\", Helvetica;\n    font-weight: 400;\n    color: #4f00ba;\n    text-align: center;\n    letter-spacing: -0.32px;\n    text-decoration: none;\n    line-height: normal;\n    word-wrap: break-word;\n    white-space: normal;\n}\n\n/* Style for the line break */\n.line-break {\n    position: fixed;\n    left: 20%;\n    bottom: 5%;\n    width: 60%;\n    border: none;\n    border-top: 1px solid #868689;\n    /* Light gray color for the line */\n    margin: 0;\n    padding: 0;\n}\n\n/* Style for the link */\n.twitter-link {\n    color: #fafafafa;\n}</style>\n  </head>\n\n  <body>\n    <div class=\"element-other\">\n      <div class=\"div\">\n        <div class=\"empty-state\">\n          <div class=\"media\">\n            <img alt=\"\" class=\"empty-state-image\" src=\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCTxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF83MzAyXzExNzQwNikiPgoJPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAxXzczMDJfMTE3NDA2KSI+Cgk8cGF0aCBvcGFjaXR5PSIwLjI3IiBkPSJNNDEuMjYyMiAzNy44NTM1VjM4Ljc3NzZDNDEuMjYyMiA0My4yNTQ3IDM3LjYyMTEgNDYuODk1OCAzMy4xNDQgNDYuODk1OEMyOC42NjY4IDQ2Ljg5NTggMjUuMDI1NyA0My4yNTQ3IDI1LjAyNTcgMzguNzc3NlYzNy44NTM1QzI1LjAyNTcgMzcuMjE1NSAyNS41NDI3IDM2LjY4NzUgMjYuMTkxNyAzNi42ODc1SDQwLjA5NjJDNDAuNzM0MiAzNi42ODc1IDQxLjI2MjIgMzcuMjA0NSA0MS4yNjIyIDM3Ljg1MzVWMzcuODUzNVoiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIG9wYWNpdHk9IjAuMjciIGQ9Ik02OS45OTUxIDM3Ljg2NTNWMzguNzg5M0M2OS45OTUxIDQzLjI2NjQgNjYuMzU0IDQ2LjkwNzUgNjEuODc2OSA0Ni45MDc1QzU3LjM5OTcgNDYuOTA3NSA1My43NTg2IDQzLjI2NjQgNTMuNzU4NiAzOC43ODkzVjM3Ljg2NTNDNTMuNzU4NiAzNy4yMjcyIDU0LjI3NTYgMzYuNjk5MiA1NC45MjQ2IDM2LjY5OTJINjguODI5MUM2OS40NjcxIDM2LjY5OTIgNjkuOTk1MSAzNy4yMTYyIDY5Ljk5NTEgMzcuODY1M1oiIGZpbGw9InVybCgjcGFpbnQxX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIGQ9Ik03MC45NDEgMzEuNzM3M0g1Mi44MzQ0QzUwLjc4ODQgMzEuNzM3MyA0OS4wOTQzIDM0LjM3NzQgNDguODUyMyAzNi4zNTc0SDQ2LjE5MDJDNDUuOTQ4MiAzNC4zNzc0IDQ0LjI1NDIgMzEuNzM3MyA0Mi4yMDgxIDMxLjczNzNIMjQuMTAxNkMyMS44OTA1IDMxLjczNzMgMjAuMDg2NCAzMy41NDE0IDIwLjA4NjQgMzUuNzUyNFYzOS4zNDk1QzIwLjA4NjQgNDYuMjM1OCAyNS42ODU2IDUxLjg0NTkgMzIuNTgyOCA1MS44NDU5SDMzLjcyNjlDMzkuODc2IDUxLjg0NTkgNDUuMDAyMiA0Ny4zNzk4IDQ2LjAzNjIgNDEuNTE2Nkg0OS4wMDYzQzUwLjAyOTQgNDcuMzc5OCA1NS4xNTU1IDUxLjg0NTkgNjEuMzE1NyA1MS44NDU5SDYyLjQ1OTdDNjkuMzQ2IDUxLjg0NTkgNzQuOTU2MSA0Ni4yNDY4IDc0Ljk1NjEgMzkuMzQ5NVYzNS43NTI0Qzc0Ljk1NjEgMzMuNTQxNCA3My4xNTIxIDMxLjczNzMgNzAuOTQxIDMxLjczNzNWMzEuNzM3M1pNNDIuOTIzMSAzNi45MDc1VjM5LjM0OTVDNDIuOTIzMSA0NC40MjA3IDM4Ljc5OCA0OC41NDU4IDMzLjcyNjkgNDguNTQ1OEgzMi41ODI4QzI3LjUxMTcgNDguNTQ1OCAyMy4zODY1IDQ0LjQyMDcgMjMuMzg2NSAzOS4zNDk1VjM1Ljc1MjRDMjMuMzg2NSAzNS4zNTY0IDIzLjcwNTUgMzUuMDM3NCAyNC4xMDE2IDM1LjAzNzRINDIuMjA4MUM0Mi42MDQxIDM1LjAzNzQgNDIuOTIzMSAzNS4zNTY0IDQyLjkyMzEgMzUuNzUyNFYzNi45MDc1VjM2LjkwNzVaTTcxLjY1NiAzOS4zNDk1QzcxLjY1NiA0NC40MjA3IDY3LjUzMDkgNDguNTQ1OCA2Mi40NTk3IDQ4LjU0NThINjEuMzE1N0M1Ni4yNDQ2IDQ4LjU0NTggNTIuMTE5NCA0NC40MjA3IDUyLjExOTQgMzkuMzQ5NVYzNS43NTI0QzUyLjExOTQgMzUuMzU2NCA1Mi40Mzg0IDM1LjAzNzQgNTIuODM0NCAzNS4wMzc0SDcwLjk0MUM3MS4zMzcgMzUuMDM3NCA3MS42NTYgMzUuMzU2NCA3MS42NTYgMzUuNzUyNFYzOS4zNDk1VjM5LjM0OTVaIiBmaWxsPSJ1cmwoI3BhaW50Ml9saW5lYXJfNzMwMl8xMTc0MDYpIi8+Cgk8cGF0aCBkPSJNODUuNzkxNyA0My4yMzMxQzg2LjI1MzcgNDEuNjM4IDg2LjQ4NDcgMzkuOTc3IDg2LjQ4NDcgMzguMjkzOUM4Ni40ODQ3IDI4LjQ1OTYgNzguNDg3NSAyMC40NjI0IDY4LjY1MzIgMjAuNDYyNEM2NS45MzYxIDIwLjQ2MjQgNjMuMjYzIDIxLjA4OTQgNjAuODIwOSAyMi4yODg0QzU2LjczOTggMTQuMTU5MiA0OC40Njc1IDkgMzkuMjQ5MiA5QzI1LjkyNzggOSAxNS4wOTI1IDE5LjgzNTMgMTUuMDkyNSAzMy4xNTY4QzE1LjA5MjUgMzMuNTQxOCAxNS4wOTI1IDMzLjkzNzggMTUuMTI1NSAzNC4zNDQ4QzYuNjQ0MjEgMzUuMTU4OCAwIDQyLjMyIDAgNTEuMDEwM0MwIDYwLjIzOTYgNy41MTMyNCA2Ny43NTI4IDE2Ljc0MjUgNjcuNzUyOEg4My42NDY2QzkwLjQ1NTggNjcuNzUyOCA5NiA2Mi4yMDg3IDk2IDU1LjM5OTVDOTYgNDkuMzE2MyA5MS41ODg5IDQ0LjI1NjEgODUuNzkxNyA0My4yMzMxVjQzLjIzMzFaTTgzLjY0NjYgNjQuNDUyN0gxNi43NDI1QzkuMzI4MjkgNjQuNDUyNyAzLjMwMDEgNTguNDI0NSAzLjMwMDEgNTEuMDEwM0MzLjMwMDEgNDMuNTk2MSA5LjMyODI5IDM3LjU2NzkgMTYuNzIwNSAzNy41Njc5TDE4Ljc5OTYgMzcuNjExOUwxOC41Njg2IDM1LjczMDhDMTguNDQ3NiAzNC43NjI4IDE4LjM5MjYgMzMuOTQ4OCAxOC4zOTI2IDMzLjE2NzhDMTguMzkyNiAyMS42NjE0IDI3Ljc1MzkgMTIuMzExMSAzOS4yNDkyIDEyLjMxMTFDNDcuNzMwNSAxMi4zMTExIDU1LjMwOTcgMTcuMzkzMyA1OC41NDM4IDI1LjI0NzVMNTkuMjkxOSAyNy4wNjI2TDYwLjk1MjkgMjYuMDE3NUM2My4yNzQgMjQuNTU0NSA2NS45MzYxIDIzLjc4NDUgNjguNjY0MSAyMy43ODQ1Qzc2LjY3MjQgMjMuNzg0NSA4My4xOTU2IDMwLjI5NjcgODMuMTk1NiAzOC4zMTU5QzgzLjE5NTYgNDAuMzA3IDgyLjc5OTYgNDIuMjQzIDgyLjAwNzYgNDQuMDY5MUw4MC45ODQ1IDQ2LjQzNDJMODMuNTU4NiA0Ni4zNzkySDgzLjc0NTZDODguNjk1OCA0Ni40MTIyIDkyLjY5OTkgNTAuNDYwMyA5Mi42OTk5IDU1LjQyMTVDOTIuNjk5OSA2MC4zODI2IDg4LjY0MDggNjQuNDc0NyA4My42NDY2IDY0LjQ3NDdWNjQuNDUyN1oiIGZpbGw9InVybCgjcGFpbnQzX2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTxwYXRoIGQ9Ik00Ny41MjEzIDU5LjM0ODVDNTAuMTgzNCA1OS4zNDg1IDUyLjMyODQgNTYuODE4NCA1Mi4zMjg0IDUzLjY5NDNINDIuNzAzMUM0Mi43MDMxIDU2LjgxODQgNDQuODU5MiA1OS4zNDg1IDQ3LjUxMDMgNTkuMzQ4NUg0Ny41MjEzWiIgZmlsbD0idXJsKCNwYWludDRfbGluZWFyXzczMDJfMTE3NDA2KSIvPgoJPHBhdGggb3BhY2l0eT0iMC4yNyIgZD0iTTM3LjM1NzEgNjcuNzUzMkg2MS44ODc5TDU0LjU1MDYgNzQuMjU0NEM1NC4yMDk2IDc0LjkxNDQgNTQuNjkzNiA3NS42OTU0IDU1LjQzMDcgNzUuNjk1NEg2Mi4wODU5QzYzLjA0MjkgNzUuNjk1NCA2My40Mzg5IDc2LjkxNjUgNjIuNjY4OSA3Ny40Nzc1TDM1LjQ0MyA5Ny40NTQxQzM0LjYyOSA5OC4wNDgxIDMzLjU0IDk3LjE5MDEgMzMuOTU4IDk2LjI1NTFMNDAuMTczMiA4Mi4xMzA2QzQwLjQ1OTIgODEuNDgxNiAzOS45ODYyIDgwLjc0NDYgMzkuMjcxMiA4MC43NDQ2SDMwLjQxNTlDMjkuNzExOSA4MC43NDQ2IDI5LjIzODggODAuMDI5NiAyOS41MDI5IDc5LjM4MDZMMzcuMzc5MSA2Ny43NDIyTDM3LjM1NzEgNjcuNzUzMloiIGZpbGw9InVybCgjcGFpbnQ1X2xpbmVhcl83MzAyXzExNzQwNikiLz4KCTwvZz4KCTwvZz4KCTxkZWZzPgoJPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzczMDJfMTE3NDA2IiB4MT0iMjUuMDQ3NyIgeTE9IjQxLjc5MTciIHgyPSI0MS4yNzMyIiB5Mj0iNDEuNzkxNyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgoJPHN0b3Agc3RvcC1jb2xvcj0iI0I4MjlGRiIvPgoJPHN0b3Agb2Zmc2V0PSIwLjUzIiBzdG9wLWNvbG9yPSIjNzkyRUU1Ii8+Cgk8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2MjRFRkYiLz4KCTwvbGluZWFyR3JhZGllbnQ+Cgk8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MV9saW5lYXJfNzMwMl8xMTc0MDYiIHgxPSI1My43Njk2IiB5MT0iOS4wMDAzNCIgeDI9IjY5Ljk5NTEiIHkyPSI5LjAwMDM0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+Cgk8c3RvcCBzdG9wLWNvbG9yPSIjQjgyOUZGIi8+Cgk8c3RvcCBvZmZzZXQ9IjAuNTMiIHN0b3AtY29sb3I9IiM3OTJFRTUiLz4KCTxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzYyNEVGRiIvPgoJPC9saW5lYXJHcmFkaWVudD4KCTxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQyX2xpbmVhcl83MzAyXzExNzQwNiIgeDE9IjQ3Ljk3MjMiIHkxPSI3Ni45NTk3IiB4Mj0iNDcuMTkxMyIgeTI9IjguNjM2NTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KCTxzdG9wIHN0b3AtY29sb3I9IiNCODI5RkYiLz4KCTxzdG9wIG9mZnNldD0iMC41MyIgc3RvcC1jb2xvcj0iIzc5MkVFNSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjI0RUZGIi8+Cgk8L2xpbmVhckdyYWRpZW50PgoJPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDNfbGluZWFyXzczMDJfMTE3NDA2IiB4MT0iNDguMjY5NSIgeTE9Ijc2Ljk0OTEiIHgyPSI0Ny40ODg1IiB5Mj0iOC42MzY5OSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgoJPHN0b3Agc3RvcC1jb2xvcj0iI0I4MjlGRiIvPgoJPHN0b3Agb2Zmc2V0PSIwLjUzIiBzdG9wLWNvbG9yPSIjNzkyRUU1Ii8+Cgk8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2MjRFRkYiLz4KCTwvbGluZWFyR3JhZGllbnQ+Cgk8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50NF9saW5lYXJfNzMwMl8xMTc0MDYiIHgxPSI0Ny43ODUzIiB5MT0iNzYuOTYwMSIgeDI9IjQ3LjAwNDMiIHkyPSI4LjYzNjkzIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+Cgk8c3RvcCBzdG9wLWNvbG9yPSIjQjgyOUZGIi8+Cgk8c3RvcCBvZmZzZXQ9IjAuNTMiIHN0b3AtY29sb3I9IiM3OTJFRTUiLz4KCTxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzYyNEVGRiIvPgoJPC9saW5lYXJHcmFkaWVudD4KCTxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQ1X2xpbmVhcl83MzAyXzExNzQwNiIgeDE9IjQ2LjA0NzQiIHkxPSI5NS4zMDkxIiB4Mj0iNDYuNDk4NCIgeTI9IjU1Ljg2MTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KCTxzdG9wIHN0b3AtY29sb3I9IiNCODI5RkYiLz4KCTxzdG9wIG9mZnNldD0iMC41MyIgc3RvcC1jb2xvcj0iIzc5MkVFNSIvPgoJPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjI0RUZGIi8+Cgk8L2xpbmVhckdyYWRpZW50PgoJPGNsaXBQYXRoIGlkPSJjbGlwMF83MzAyXzExNzQwNiI+Cgk8cGF0aCBkPSJNMCA2QzAgMi42ODYyOSAyLjY4NjI5IDAgNiAwSDkwQzkzLjMxMzcgMCA5NiAyLjY4NjI5IDk2IDZWOTBDOTYgOTMuMzEzNyA5My4zMTM3IDk2IDkwIDk2SDZDMi42ODYyOSA5NiAwIDkzLjMxMzcgMCA5MFY2WiIgZmlsbD0id2hpdGUiLz4KCTwvY2xpcFBhdGg+Cgk8Y2xpcFBhdGggaWQ9ImNsaXAxXzczMDJfMTE3NDA2Ij4KCTxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI4OC42NjI4IiBmaWxsPSJ3aGl0ZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCA5KSIvPgoJPC9jbGlwUGF0aD4KCTwvZGVmcz4KCTwvc3ZnPgo=\" />\n          </div>\n          <div class=\"content\">\n            <div class=\"text\">\n              <div class=\"element-heading\">Coming soon</div>\n            </div>\n            <div class=\"frame\">\n              <p class=\"element-label\">Lightning AI is not available in your region, yet.</p>\n              <p class=\"element-label-second-line\">\n                <a href=\"https://x.com/LightningAI\" target=\"_blank\" class=\"twitter-link\" rel=\"noreferrer\">\n                  Follow us on Twitter\n                </a>\n                <span style=\"margin-left: 4px\"> for future announcements! </span>\n              </p>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "modal",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 56568.93,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 7015,
+          "cacheClearMs": 7,
+          "bunDownloadMs": 376,
+          "bunUnpackMs": 704,
+          "cloneMs": 2589,
+          "installMs": 19208,
+          "typecheckMs": 19909,
+          "diskAfterClone": 0,
+          "diskAfterInstall": 0,
+          "diskAfterTypecheck": 0,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 4.19.0-gvisor",
+          "logicalCpus": "17",
+          "cpuModel": "unknown",
+          "memoryKib": "263360816"
+        },
+        {
+          "totalMs": 63690.3,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 7229,
+          "cacheClearMs": 9,
+          "bunDownloadMs": 275,
+          "bunUnpackMs": 698,
+          "cloneMs": 2659,
+          "installMs": 21494,
+          "typecheckMs": 24756,
+          "diskAfterClone": 0,
+          "diskAfterInstall": 0,
+          "diskAfterTypecheck": 0,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 4.19.0-gvisor",
+          "logicalCpus": "17",
+          "cpuModel": "unknown",
+          "memoryKib": "263360836"
+        },
+        {
+          "totalMs": 62910.23,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 7427,
+          "cacheClearMs": 7,
+          "bunDownloadMs": 309,
+          "bunUnpackMs": 701,
+          "cloneMs": 3053,
+          "installMs": 19922,
+          "typecheckMs": 24896,
+          "diskAfterClone": 0,
+          "diskAfterInstall": 0,
+          "diskAfterTypecheck": 0,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 4.19.0-gvisor",
+          "logicalCpus": "17",
+          "cpuModel": "unknown",
+          "memoryKib": "263360796"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 62910.23,
+          "p95": 63690.3,
+          "p99": 63690.3
+        },
+        "prepareMs": {
+          "median": 7229,
+          "p95": 7427,
+          "p99": 7427
+        },
+        "bunDownloadMs": {
+          "median": 309,
+          "p95": 376,
+          "p99": 376
+        },
+        "bunUnpackMs": {
+          "median": 701,
+          "p95": 704,
+          "p99": 704
+        },
+        "cloneMs": {
+          "median": 2659,
+          "p95": 3053,
+          "p99": 3053
+        },
+        "installMs": {
+          "median": 19922,
+          "p95": 21494,
+          "p99": 21494
+        },
+        "typecheckMs": {
+          "median": 24756,
+          "p95": 24896,
+          "p99": 24896
+        }
+      },
+      "successRate": 1
+    },
+    {
+      "provider": "northflank",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 3.04,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 3.05,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        },
+        {
+          "totalMs": 3.01,
+          "phasesCompleted": 0,
+          "phasesTotal": 7,
+          "error": "No benchmark phases completed: bash: line 1: curl: command not found"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "runloop",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 78087.49,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 22884,
+          "cacheClearMs": 1241,
+          "bunDownloadMs": 392,
+          "bunUnpackMs": 671,
+          "cloneMs": 3891,
+          "installMs": 24863,
+          "typecheckMs": 12331,
+          "diskAfterClone": 352583680,
+          "diskAfterInstall": 3236192256,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 6.18.32",
+          "logicalCpus": "1",
+          "cpuModel": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+          "memoryKib": "2038864",
+          "error": "Script exited with code 1:  ERROR  run failed: command  exited (1) | error: \"turbo\" exited with code 1 | error: script \"typecheck\" exited with code 1"
+        },
+        {
+          "totalMs": 80127.78,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 22952,
+          "cacheClearMs": 1194,
+          "bunDownloadMs": 261,
+          "bunUnpackMs": 669,
+          "cloneMs": 3732,
+          "installMs": 29393,
+          "typecheckMs": 10443,
+          "diskAfterClone": 352591872,
+          "diskAfterInstall": 3236200448,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 6.18.32",
+          "logicalCpus": "1",
+          "cpuModel": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+          "memoryKib": "2038864",
+          "error": "Script exited with code 1:  ERROR  run failed: command  exited (1) | error: \"turbo\" exited with code 1 | error: script \"typecheck\" exited with code 1"
+        },
+        {
+          "totalMs": 79579.78,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 23026,
+          "cacheClearMs": 1402,
+          "bunDownloadMs": 352,
+          "bunUnpackMs": 669,
+          "cloneMs": 2806,
+          "installMs": 28365,
+          "typecheckMs": 11585,
+          "diskAfterClone": 352587776,
+          "diskAfterInstall": 3236208640,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 6.18.32",
+          "logicalCpus": "1",
+          "cpuModel": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+          "memoryKib": "2038864",
+          "error": "Script exited with code 1:  ERROR  run failed: command  exited (1) | error: \"turbo\" exited with code 1 | error: script \"typecheck\" exited with code 1"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 79579.78,
+          "p95": 80127.78,
+          "p99": 80127.78
+        },
+        "prepareMs": {
+          "median": 22952,
+          "p95": 23026,
+          "p99": 23026
+        },
+        "bunDownloadMs": {
+          "median": 352,
+          "p95": 392,
+          "p99": 392
+        },
+        "bunUnpackMs": {
+          "median": 669,
+          "p95": 671,
+          "p99": 671
+        },
+        "cloneMs": {
+          "median": 3732,
+          "p95": 3891,
+          "p99": 3891
+        },
+        "installMs": {
+          "median": 28365,
+          "p95": 29393,
+          "p99": 29393
+        },
+        "typecheckMs": {
+          "median": 11585,
+          "p95": 12331,
+          "p99": 12331
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "superserve",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: Request timed out after 30000ms"
+        },
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: Request timed out after 30000ms"
+        },
+        {
+          "totalMs": 0,
+          "error": "Dax benchmark failed with exit code 127: Request timed out after 30000ms"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "prepareMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "tensorlake",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 19490.54,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 12363,
+          "cacheClearMs": 127,
+          "bunDownloadMs": 229,
+          "bunUnpackMs": 642,
+          "cloneMs": 1983,
+          "installMs": 3852,
+          "typecheckMs": 29,
+          "diskAfterClone": 352628736,
+          "diskAfterInstall": 366784512,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 7.0.7",
+          "logicalCpus": "1",
+          "cpuModel": "Intel(R) Xeon(R) Processor",
+          "memoryKib": "1007192",
+          "error": "Script exited with code 1: error: Cannot run \"/tmp/opencode-provider-benchmark/repo/turbo.json\" | note: Bun cannot run json files directly | error: script \"typecheck\" exited with code 1"
+        },
+        {
+          "totalMs": 21525.02,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 15865,
+          "cacheClearMs": 144,
+          "bunDownloadMs": 317,
+          "bunUnpackMs": 635,
+          "cloneMs": 2069,
+          "installMs": 2206,
+          "typecheckMs": 31,
+          "diskAfterClone": 352628736,
+          "diskAfterInstall": 356089856,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 7.0.7",
+          "logicalCpus": "1",
+          "cpuModel": "Intel(R) Xeon(R) Processor",
+          "memoryKib": "1007192",
+          "error": "Script exited with code 1: error: Cannot run \"/tmp/opencode-provider-benchmark/repo/turbo.json\" | note: Bun cannot run json files directly | error: script \"typecheck\" exited with code 1"
+        },
+        {
+          "totalMs": 22782.73,
+          "phasesCompleted": 7,
+          "phasesTotal": 7,
+          "prepareMs": 16141,
+          "cacheClearMs": 128,
+          "bunDownloadMs": 298,
+          "bunUnpackMs": 582,
+          "cloneMs": 1665,
+          "installMs": 3646,
+          "typecheckMs": 41,
+          "diskAfterClone": 352624640,
+          "diskAfterInstall": 375984128,
+          "commit": "08fb47373509ba64b13441061314eeacf4264f51",
+          "bunVersion": "1.3.14",
+          "nodeVersion": "v24.14.1",
+          "architecture": "x86_64",
+          "kernel": "Linux 7.0.7",
+          "logicalCpus": "1",
+          "cpuModel": "Intel(R) Xeon(R) Processor",
+          "memoryKib": "1007192",
+          "error": "Script exited with code 1: error: Cannot run \"/tmp/opencode-provider-benchmark/repo/turbo.json\" | note: Bun cannot run json files directly | error: script \"typecheck\" exited with code 1"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 21525.02,
+          "p95": 22782.73,
+          "p99": 22782.73
+        },
+        "prepareMs": {
+          "median": 15865,
+          "p95": 16141,
+          "p99": 16141
+        },
+        "bunDownloadMs": {
+          "median": 298,
+          "p95": 317,
+          "p99": 317
+        },
+        "bunUnpackMs": {
+          "median": 635,
+          "p95": 642,
+          "p99": 642
+        },
+        "cloneMs": {
+          "median": 1983,
+          "p95": 2069,
+          "p99": 2069
+        },
+        "installMs": {
+          "median": 3646,
+          "p95": 3852,
+          "p99": 3852
+        },
+        "typecheckMs": {
+          "median": 31,
+          "p95": 41,
+          "p99": 41
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "upstash",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 6852.25,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 6802,
+          "error": "Script exited with code 1: debconf: delaying package configuration, since apt-utils is not installed | main: line 102: /usr/local/bin/node: cannot execute binary file: Exec format error"
+        },
+        {
+          "totalMs": 6529.02,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 6479,
+          "error": "Script exited with code 1: debconf: delaying package configuration, since apt-utils is not installed | main: line 102: /usr/local/bin/node: cannot execute binary file: Exec format error"
+        },
+        {
+          "totalMs": 6521.02,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 6473,
+          "error": "Script exited with code 1: debconf: delaying package configuration, since apt-utils is not installed | main: line 102: /usr/local/bin/node: cannot execute binary file: Exec format error"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 6529.02,
+          "p95": 6852.25,
+          "p99": 6852.25
+        },
+        "prepareMs": {
+          "median": 6479,
+          "p95": 6802,
+          "p99": 6802
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    },
+    {
+      "provider": "vercel",
+      "mode": "sandbox-dax",
+      "iterations": [
+        {
+          "totalMs": 72.98,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 1,
+          "error": "prepare: apt_get_required"
+        },
+        {
+          "totalMs": 73.28,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 1,
+          "error": "prepare: apt_get_required"
+        },
+        {
+          "totalMs": 98.96,
+          "phasesCompleted": 1,
+          "phasesTotal": 7,
+          "prepareMs": 1,
+          "error": "prepare: apt_get_required"
+        }
+      ],
+      "summary": {
+        "totalMs": {
+          "median": 73.28,
+          "p95": 98.96,
+          "p99": 98.96
+        },
+        "prepareMs": {
+          "median": 1,
+          "p95": 1,
+          "p99": 1
+        },
+        "bunDownloadMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "bunUnpackMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "cloneMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "installMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "typecheckMs": {
+          "median": 0,
+          "p95": 0,
+          "p99": 0
+        }
+      },
+      "successRate": 0
+    }
+  ]
+}
