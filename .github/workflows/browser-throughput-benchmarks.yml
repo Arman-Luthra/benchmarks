@@ -55,9 +55,10 @@ jobs:
                 break
               fi
               # Fetch the article HTML and check for article-body links.
-              # The benchmark's selector is #mw-content-text a[href*="/wiki/"]:not([href*=":"]).
-              # Protocol-relative links (//en.wikipedia.org/wiki/Article) are
-              # the most common body-link format in the current Wikipedia HTML.
+              # The benchmark selects #mw-content-text a[href*="/wiki/"] and
+              # filters in JS for links without a namespace colon after /wiki/.
+              # Body links appear as protocol-relative (//en.wikipedia.org/wiki/)
+              # or absolute (https://en.wikipedia.org/wiki/) URLs.
               html=$(curl -sL -A 'ComputeSDK-Benchmark' "$url")
               if echo "$html" | grep -qP 'href="(//en\.wikipedia\.org)?/wiki/[^"]*" *' \
                  && echo "$html" | grep -oP 'href="[^"]*"' \
