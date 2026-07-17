@@ -194,7 +194,10 @@ if (result.error) {
 
 // Count completed phases
 const phaseKeys = ['prepare', 'cache_clear', 'bun_download', 'bun_unpack', 'clone', 'install', 'typecheck'];
-const phasesCompleted = phaseKeys.filter(k => phases[k] !== undefined).length;
+const rawPhasesCompleted = phaseKeys.filter(k => phases[k] !== undefined).length;
+// The script's phase() function emits BENCH_PHASE even for the failing phase (it prints timing before checking exit code).
+// When there's an error, the last phase that emitted a BENCH_PHASE line is the one that failed, so don't count it.
+const phasesCompleted = benchError ? Math.max(0, rawPhasesCompleted - 1) : rawPhasesCompleted;
 
 // If no phases completed, the script didn't actually run (e.g. curl missing)
 if (phasesCompleted === 0 && !benchError) {
