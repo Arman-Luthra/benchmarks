@@ -73,7 +73,12 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
       const result = await runDaxIteration(sandbox, name, timeout);
       results.push(result);
       if (result.error) {
-        console.log(`    FAILED: ${result.error}`);
+        const phases = [];
+        if (result.cloneMs) phases.push(`clone ${(result.cloneMs / 1000).toFixed(2)}s`);
+        if (result.installMs) phases.push(`install ${(result.installMs / 1000).toFixed(2)}s`);
+        if (result.typecheckMs) phases.push(`typecheck ${(result.typecheckMs / 1000).toFixed(2)}s`);
+        const phaseStr = phases.length > 0 ? ` | ${phases.join(' | ')}` : '';
+        console.log(`    FAILED: ${result.error}${phaseStr}`);
       } else {
         console.log(`    Total: ${(result.totalMs! / 1000).toFixed(2)}s | clone ${(result.cloneMs! / 1000).toFixed(2)}s | install ${(result.installMs! / 1000).toFixed(2)}s | typecheck ${(result.typecheckMs! / 1000).toFixed(2)}s`);
       }
@@ -101,12 +106,13 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
   }
 
   const successful = results.filter(r => !r.error);
+  const withTiming = results.filter(r => r.totalMs > 0);
 
   return {
     provider: name,
     mode: 'sandbox-dax',
     iterations: results,
-    summary: successful.length > 0 ? summarize(successful) : emptySummary(),
+    summary: withTiming.length > 0 ? summarize(withTiming) : emptySummary(),
     successRate: results.length > 0 ? successful.length / results.length : 0,
   };
 }
@@ -216,11 +222,16 @@ console.log(JSON.stringify({
 }
 
 function summarize(results: DaxTimingResult[]): DaxBenchmarkResult['summary'] {
+  const empty = { median: 0, p95: 0, p99: 0 };
+  const pick = (key: keyof DaxTimingResult) => {
+    const values = results.map(r => r[key]).filter((v): v is number => typeof v === 'number' && v > 0);
+    return values.length > 0 ? computeStats(values) : empty;
+  };
   return {
-    totalMs: computeStats(results.map(r => r.totalMs)),
-    cloneMs: computeStats(results.map(r => r.cloneMs ?? 0)),
-    installMs: computeStats(results.map(r => r.installMs ?? 0)),
-    typecheckMs: computeStats(results.map(r => r.typecheckMs ?? 0)),
+    totalMs: pick('totalMs'),
+    cloneMs: pick('cloneMs'),
+    installMs: pick('installMs'),
+    typecheckMs: pick('typecheckMs'),
   };
 }
 
