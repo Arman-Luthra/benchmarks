@@ -89,7 +89,8 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
         const score = result.phasesCompleted != null ? `${result.phasesCompleted}/${result.phasesTotal}` : '';
         console.log(`    FAILED${score ? ` (${score} phases)` : ''}: ${result.error}${phaseStr}`);
       } else {
-        console.log(`    OK (${result.phasesCompleted}/${result.phasesTotal}): total ${(result.totalMs! / 1000).toFixed(2)}s | prepare ${(result.prepareMs! / 1000).toFixed(2)}s | clone ${(result.cloneMs! / 1000).toFixed(2)}s | install ${(result.installMs! / 1000).toFixed(2)}s | typecheck ${(result.typecheckMs! / 1000).toFixed(2)}s`);
+        const fmt = (ms?: number) => ms ? `${(ms / 1000).toFixed(2)}s` : 'N/A';
+        console.log(`    OK (${result.phasesCompleted}/${result.phasesTotal}): total ${fmt(result.totalMs)} | prepare ${fmt(result.prepareMs)} | clone ${fmt(result.cloneMs)} | install ${fmt(result.installMs)} | typecheck ${fmt(result.typecheckMs)}`);
       }
     } catch (err) {
       const error = err instanceof Error ? err.message : String(err);
@@ -115,7 +116,7 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
   }
 
   const successful = results.filter(r => !r.error);
-  const withTiming = results.filter(r => r.totalMs > 0);
+  const withTiming = results.filter(r => r.totalMs > 0 && (r.phasesCompleted ?? 0) > 0);
 
   return {
     provider: name,
@@ -194,6 +195,12 @@ if (result.error) {
 // Count completed phases
 const phaseKeys = ['prepare', 'cache_clear', 'bun_download', 'bun_unpack', 'clone', 'install', 'typecheck'];
 const phasesCompleted = phaseKeys.filter(k => phases[k] !== undefined).length;
+
+// If no phases completed, the script didn't actually run (e.g. curl missing)
+if (phasesCompleted === 0 && !benchError) {
+  const tail = stderr.trim().split('\n').slice(-2).join(' | ');
+  benchError = 'No benchmark phases completed' + (tail ? ': ' + tail : ' (curl may not be available)');
+}
 
 console.log(JSON.stringify({
   totalMs,
