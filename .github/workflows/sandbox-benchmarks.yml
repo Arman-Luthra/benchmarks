@@ -30,7 +30,7 @@ on:
         default: false
         type: boolean
       mode:
-        description: 'Test mode (leave empty to run all)'
+        description: 'Mode (leave empty to run all)'
         required: false
         default: ''
         type: choice
