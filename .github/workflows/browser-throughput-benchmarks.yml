@@ -60,8 +60,9 @@ jobs:
               # Body links appear as protocol-relative (//en.wikipedia.org/wiki/)
               # or absolute (https://en.wikipedia.org/wiki/) URLs.
               html=$(curl -sL -A 'ComputeSDK-Benchmark' "$url")
-              if echo "$html" | grep -oP 'href="[^"]*"' \
-                 | grep -qP '/wiki/[^:]*$'; then
+              if echo "$html" | grep -qP 'href="(//en\.wikipedia\.org)?/wiki/[^"]*" *' \
+                 && echo "$html" | grep -oP 'href="[^"]*"' \
+                    | grep -qP '/wiki/[^:]*$'; then
                 break
               fi
             done
