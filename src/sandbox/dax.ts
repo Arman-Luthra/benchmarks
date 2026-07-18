@@ -1,11 +1,16 @@
 import fs from 'fs';
 import os from 'os';
+import path from 'path';
 import type { ProviderConfig, Stats } from './types.js';
 import { computeStats } from '../util/stats.js';
 import { withTimeout } from '../util/timeout.js';
 import { VMTier } from '@codesandbox/sdk';
 
-const BENCH_SCRIPT_URL = 'https://raw.githubusercontent.com/anomalyco/opencode/provider-benchmark/script/provider-benchmark.sh';
+// The benchmark script is now loaded from the local filesystem (scripts/provider-benchmark.sh)
+// rather than fetched over HTTP from upstream. This avoids a curl dependency inside the
+// sandbox (some providers don't ship curl). The previous upstream URL was:
+//   https://raw.githubusercontent.com/anomalyco/opencode/provider-benchmark/script/provider-benchmark.sh
+const BENCH_SCRIPT_PATH = path.resolve(import.meta.dirname, '../../scripts/provider-benchmark.sh');
 
 // Standardized resource sizing for fair comparison across providers.
 // Target: 8 vCPU, 16 GiB RAM.
@@ -154,20 +159,32 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
 }
 
 async function runDaxIteration(sandbox: any, providerName: string, timeout: number): Promise<DaxTimingResult> {
+  // Load the benchmark script from the local filesystem rather than fetching
+  // it over HTTP inside the sandbox. This eliminates a curl dependency
+  // (several providers don't ship curl in their sandboxes).
+  const benchScript = fs.readFileSync(BENCH_SCRIPT_PATH, 'utf8');
   const script = String.raw`
 const { spawnSync } = require('child_process');
 const { performance } = require('perf_hooks');
 
-const scriptUrl = ${JSON.stringify(BENCH_SCRIPT_URL)};
+const benchScript = ${JSON.stringify(benchScript)};
 const provider = ${JSON.stringify(providerName)};
 
 const start = performance.now();
 
-// Download and run the dax benchmark script via curl|bash.
-// The script emits structured BENCH_PHASE / BENCH_META / BENCH_DISK / BENCH_DONE
-// lines on stdout and BENCH_ERROR on stderr that we parse below.
-// If curl is not available the script will fail (which is expected and tracked).
-const result = spawnSync('bash', ['-c', 'curl -fsSL ' + scriptUrl + ' | BENCH_PROVIDER=' + provider + ' BENCH_REGION=unknown bash'], {
+// Write the benchmark script to /tmp inside the sandbox via a single-quoted
+// heredoc (so $ and backticks in the script are not expanded) and execute it.
+// A random marker avoids collisions with anything appearing on its own line
+// inside the script. The script emits the same BENCH_PHASE / BENCH_META /
+// BENCH_DISK / BENCH_DONE / BENCH_ERROR structure consumed by the parser below.
+const marker = '__DAX_BENCH_HEREDOC_' + Math.random().toString(36).slice(2) + '__';
+const shellCmd =
+  "cat > /tmp/provider-benchmark.sh <<'" + marker + "'\n" +
+  benchScript + "\n" +
+  marker + "\n" +
+  "BENCH_PROVIDER=" + provider + " BENCH_REGION=unknown bash /tmp/provider-benchmark.sh";
+
+const result = spawnSync('bash', ['-c', shellCmd], {
   encoding: 'utf8',
   timeout: 540000,
   stdio: ['ignore', 'pipe', 'pipe'],
@@ -339,7 +356,7 @@ export async function writeDaxResultsJson(results: DaxBenchmarkResult[], outPath
     version: '1.0',
     timestamp: new Date().toISOString(),
     environment: { node: process.version, platform: os.platform(), arch: os.arch() },
-    config: { mode: 'sandbox-dax', timeoutMs: 600000, scriptUrl: BENCH_SCRIPT_URL },
+    config: { mode: 'sandbox-dax', timeoutMs: 600000, scriptSource: 'local', scriptPath: BENCH_SCRIPT_PATH },
     results: cleanResults,
   };
 
