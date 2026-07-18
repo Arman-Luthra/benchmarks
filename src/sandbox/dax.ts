@@ -107,6 +107,14 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
 
     try {
       sandbox = await withTimeout(compute.sandbox.create(getSandboxOptionsWithResources(name, sandboxOptions)), timeout, 'Sandbox creation timed out');
+      // Workaround: E2B's ComputeSDK wrapper doesn't forward command timeoutMs.
+      // Access the underlying E2B sandbox and disable the default 60s command timeout.
+      if (name === 'e2b' && sandbox?.getInstance) {
+        const e2bSandbox = sandbox.getInstance();
+        if (e2bSandbox?.commands?.defaultProcessConnectionTimeout !== undefined) {
+          e2bSandbox.commands.defaultProcessConnectionTimeout = 0;
+        }
+      }
       const result = await runDaxIteration(sandbox, name, timeout);
       results.push(result);
       if (result.error) {

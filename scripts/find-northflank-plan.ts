@@ -76,16 +76,18 @@ async function main() {
         `No Northflank plan meets the target resources of ${targetCpu} vCPU / ${targetRam} MB`,
       );
     }
-    // Pick the closest plan by minimising normalised excess (1 vCPU == 2048 MB).
+    // Pick the SMALLEST suitable plan by total resource footprint to minimise
+    // the chance of exceeding Northflank project allowance. (1 vCPU ~= 2048 MB
+    // for normalisation against RAM in MB.)
     suitable.sort((a, b) => {
-      const scoreA = (a.cpuResource ?? 0) + (a.ramResource ?? 0) / 2048;
-      const scoreB = (b.cpuResource ?? 0) + (b.ramResource ?? 0) / 2048;
-      return scoreA - scoreB;
+      const sizeA = (a.cpuResource ?? 0) * 2048 + (a.ramResource ?? 0);
+      const sizeB = (b.cpuResource ?? 0) * 2048 + (b.ramResource ?? 0);
+      return sizeA - sizeB;
     });
     selectedPlan = suitable[0]!;
     console.warn(
       `Warning: no exact match for ${targetCpu} vCPU / ${targetRam} MB. ` +
-        `Using closest suitable plan: ${selectedPlan.id} ` +
+        `Using smallest suitable plan: ${selectedPlan.id} ` +
         `(${selectedPlan.cpuResource ?? '?'} vCPU, ${selectedPlan.ramResource ?? '?'} MB)`,
     );
   }
