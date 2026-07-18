@@ -57,6 +57,7 @@ jobs:
           - isorun
           - lightning
           - modal
+          - namespace
           - northflank
           - runloop
           - superserve
@@ -113,6 +114,7 @@ jobs:
           MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
           MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
           NORTHFLANK_TOKEN: ${{ secrets.NORTHFLANK_TOKEN }}
+          NSC_TOKEN: ${{ secrets.NSC_TOKEN }}
           NORTHFLANK_PROJECT_ID: ${{ secrets.NORTHFLANK_PROJECT_ID }}
           RUNLOOP_API_KEY: ${{ secrets.RUNLOOP_API_KEY }}
           SUPERSERVE_API_KEY: ${{ secrets.SUPERSERVE_API_KEY }}

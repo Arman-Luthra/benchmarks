@@ -14,7 +14,7 @@ import { isorun } from '@computesdk/isorun';
 // import { lelantos } from '@computesdk/lelantos';
 import { lightning } from '@computesdk/lightning';
 import { modal } from '@computesdk/modal';
-// import { namespace } from '@computesdk/namespace';
+import { namespace } from '@computesdk/namespace';
 import { northflank } from '@computesdk/northflank';
 // import { quilt } from '@computesdk/quilt';
 // import { railway } from '@computesdk/railway';
@@ -122,12 +122,16 @@ export const providers: ProviderConfig[] = [
     requiredEnvVars: ['MODAL_TOKEN_ID', 'MODAL_TOKEN_SECRET'],
     createCompute: () => modal({ tokenId: process.env.MODAL_TOKEN_ID!, tokenSecret: process.env.MODAL_TOKEN_SECRET!, scalableSandboxes: true }),
   },
-  // {
-  //   name: 'namespace',
-  //   requiredEnvVars: ['NSC_TOKEN'],
-  //   createCompute: () => namespace({ token: process.env.NSC_TOKEN! }),
-  //   sandboxOptions: { image: 'node:22' },
-  // },
+  {
+    name: 'namespace',
+    requiredEnvVars: ['NSC_TOKEN'],
+    createCompute: () =>
+      namespace({
+        token: process.env.NSC_TOKEN!,
+        virtualCpu: 16,
+        memoryMegabytes: 32768,
+      }),
+  },
   {
     name: 'northflank',
     requiredEnvVars: ['NORTHFLANK_TOKEN', 'NORTHFLANK_PROJECT_ID'],
