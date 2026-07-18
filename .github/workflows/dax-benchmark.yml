@@ -1,0 +1,275 @@
+name: Dax Benchmark
+
+# Disk / CPU / pause-resume sub-test under the sandbox family (see
+# src/sandbox/dax-*.ts). Named after https://x.com/thdxr's sandbox-provider
+# requirements: fast non-networked disk, fast CPU virtualizing on bare metal,
+# and pause/resume. Runs against the same provider registry as the regular
+# sandbox benchmark. Weekly, not daily — each iteration writes/reads a real
+# 256MB file and (where supported) does a real pause/resume round-trip, so
+# iteration counts are kept modest to bound cost.
+
+on:
+  pull_request:
+    paths:
+      - 'src/sandbox/dax-*.ts'
+      - 'src/sandbox/providers.ts'
+      - 'src/sandbox/types.ts'
+      - 'src/util/**'
+      - 'src/run.ts'
+      - 'src/merge-results.ts'
+      - 'package.json'
+  schedule:
+    - cron: '0 9 * * 5' # Weekly on Friday at 9am UTC (offset from the other Friday crons to avoid racing pushes to master)
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: 'Iterations per provider'
+        required: false
+        default: '10'
+      provider:
+        description: 'Provider to run (leave empty for all)'
+        required: false
+        default: ''
+      dry_run:
+        description: 'Run without committing results'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: dax-benchmark
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dax:
+    name: Dax ${{ matrix.provider }}
+    runs-on: namespace-profile-default
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        provider:
+          - archil
+          - beam
+          - blaxel
+          - cloud-run
+          - cloudflare
+          - codesandbox
+          - createos
+          - daytona
+          - declaw
+          - e2b
+          - hopx
+          - isorun
+          - lightning
+          - modal
+          - northflank
+          - runloop
+          - superserve
+          - tensorlake
+          - upstash
+          - vercel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+      - name: Install dependencies
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.provider == '' || github.event.inputs.provider == matrix.provider
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            npm update
+          else
+            npm ci
+          fi
+      - name: Clear stale results from checkout
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.provider == '' || github.event.inputs.provider == matrix.provider
+        run: rm -rf results/dax/
+      - name: Run dax benchmark
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.provider == '' || github.event.inputs.provider == matrix.provider
+        env:
+          COMPUTESDK_API_KEY: ${{ secrets.COMPUTESDK_API_KEY }}
+          ARCHIL_API_KEY: ${{ secrets.ARCHIL_API_KEY }}
+          ARCHIL_REGION: ${{ secrets.ARCHIL_REGION }}
+          ARCHIL_DISK_ID: ${{ secrets.ARCHIL_DISK_ID }}
+          BEAM_TOKEN: ${{ secrets.BEAM_TOKEN }}
+          BEAM_WORKSPACE_ID: ${{ secrets.BEAM_WORKSPACE_ID }}
+          CLOUD_RUN_SANDBOX_URL: ${{ secrets.CLOUD_RUN_SANDBOX_URL }}
+          CLOUD_RUN_SANDBOX_SECRET: ${{ secrets.CLOUD_RUN_SANDBOX_SECRET }}
+          BL_API_KEY: ${{ secrets.BL_API_KEY }}
+          BL_WORKSPACE: ${{ secrets.BL_WORKSPACE }}
+          CLOUDFLARE_SANDBOX_URL: ${{ secrets.CLOUDFLARE_SANDBOX_URL }}
+          CLOUDFLARE_SANDBOX_SECRET: ${{ secrets.CLOUDFLARE_SANDBOX_SECRET }}
+          CSB_API_KEY: ${{ secrets.CSB_API_KEY }}
+          CREATEOS_SANDBOX_API_KEY: ${{ secrets.CREATEOS_SANDBOX_API_KEY }}
+          DAYTONA_API_KEY: ${{ secrets.DAYTONA_API_KEY }}
+          DECLAW_API_KEY: ${{ secrets.DECLAW_API_KEY }}
+          E2B_API_KEY: ${{ secrets.E2B_API_KEY }}
+          HOPX_API_KEY: ${{ secrets.HOPX_API_KEY }}
+          ISORUN_API_KEY: ${{ secrets.ISORUN_API_KEY }}
+          LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+          NORTHFLANK_TOKEN: ${{ secrets.NORTHFLANK_TOKEN }}
+          NORTHFLANK_PROJECT_ID: ${{ secrets.NORTHFLANK_PROJECT_ID }}
+          RUNLOOP_API_KEY: ${{ secrets.RUNLOOP_API_KEY }}
+          SUPERSERVE_API_KEY: ${{ secrets.SUPERSERVE_API_KEY }}
+          TENSORLAKE_API_KEY: ${{ secrets.TENSORLAKE_API_KEY }}
+          UPSTASH_BOX_API_KEY: ${{ secrets.UPSTASH_BOX_API_KEY }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm run bench -- \
+            --mode dax \
+            --provider ${{ matrix.provider }} \
+            --iterations ${{ (github.event_name == 'schedule' && '10') || github.event.inputs.iterations || (github.event_name == 'pull_request' && '1') || '10' }}
+      - name: Upload results
+        if: always() && (github.event_name != 'workflow_dispatch' || github.event.inputs.provider == '' || github.event.inputs.provider == matrix.provider)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dax-results-${{ matrix.provider }}
+          path: results/dax/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  collect:
+    name: Collect Results
+    runs-on: namespace-profile-default
+    needs: [dax]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the rebase-on-push retry below has a merge base.
+          # A shallow (depth-1) clone can make `git rebase origin/<branch>`
+          # fail when the remote has advanced past the shallow boundary.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+      - name: Install dependencies
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            npm update
+          else
+            npm ci
+          fi
+      - name: Download dax artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dax-artifacts/
+          pattern: dax-results-*
+      - name: Merge dax results
+        # Combines the per-provider artifacts into results/dax/. Guarded so a
+        # run with no dax artifacts doesn't hard-fail.
+        run: |
+          if find dax-artifacts -name latest.json 2>/dev/null | grep -q .; then
+            npx tsx src/merge-results.ts --input dax-artifacts --mode dax
+          else
+            echo "No dax artifacts to merge"
+          fi
+      - name: Post dax results to PR
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const latestPath = 'results/dax/latest.json';
+
+            let body = '## Dax Benchmark Results (disk / CPU / pause-resume)\n\n';
+
+            if (fs.existsSync(latestPath)) {
+              const data = JSON.parse(fs.readFileSync(latestPath, 'utf-8'));
+              const results = (data.results || [])
+                .filter(r => !r.skipped)
+                .sort((a, b) => (b.compositeScore || 0) - (a.compositeScore || 0));
+
+              if (results.length > 0) {
+                body += '| # | Provider | Score | Write Mbps | Read Mbps | Fsync ms | CPU ops/s | Steal % | Pause/Resume | Status |\n';
+                body += '|---|----------|-------|------------|-----------|----------|-----------|---------|--------------|--------|\n';
+
+                results.forEach((r, i) => {
+                  const score = r.compositeScore !== undefined ? r.compositeScore.toFixed(1) : '--';
+                  const write = r.summary.diskSeqWriteMbps.median.toFixed(0);
+                  const read = r.summary.diskSeqReadMbps.median.toFixed(0);
+                  const fsync = r.summary.diskFsyncLatencyMs.median.toFixed(2);
+                  const cpu = r.summary.cpuOpsPerSec.median.toFixed(0);
+                  const steal = r.summary.cpuStealPercent.median.toFixed(2);
+                  const pauseResume = r.pauseResumeSupported
+                    ? `${r.summary.pauseMs.median.toFixed(0)}/${r.summary.resumeMs.median.toFixed(0)}ms`
+                    : 'not supported';
+                  const ok = r.iterations.filter(it => !it.error).length;
+                  const total = r.iterations.length;
+                  body += `| ${i + 1} | ${r.provider} | ${score} | ${write} | ${read} | ${fsync} | ${cpu} | ${steal} | ${pauseResume} | ${ok}/${total} |\n`;
+                });
+                body += '\n';
+              } else {
+                body += '> No dax benchmark results were generated.\n\n';
+              }
+            } else {
+              body += '> No dax benchmark results were generated.\n\n';
+            }
+
+            body += `---\n*[View full run](${runUrl})*`;
+
+            const marker = '## Dax Benchmark Results';
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.startsWith(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+      - name: Commit and push
+        if: github.event_name != 'pull_request' && github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json results/dax/
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "chore: update dax benchmark results [skip ci]"
+
+          # Remote master can advance during the run (concurrent benchmark
+          # workflows push to master too), so a plain push fails non-fast-forward.
+          # Rebase onto the latest remote and retry a few times before giving up.
+          branch="${GITHUB_REF#refs/heads/}"
+          for attempt in 1 2 3 4 5; do
+            # Rebase before each attempt (including the last) so every rebase
+            # is followed by a push — otherwise the final iteration's rebase
+            # would be wasted and a resolvable non-fast-forward could still fail.
+            git fetch origin "${branch}"
+            git rebase "origin/${branch}" || { git rebase --abort; exit 1; }
+            if git push origin "HEAD:${branch}"; then
+              echo "Pushed on attempt ${attempt}"
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); will rebase and retry"
+          done
+          echo "Failed to push after multiple attempts" >&2
+          exit 1
