@@ -131,6 +131,7 @@ export const providers: ProviderConfig[] = [
         virtualCpu: 16,
         memoryMegabytes: 32768,
       }),
+    sandboxOptions: { image: 'node:22' },
   },
   {
     name: 'northflank',

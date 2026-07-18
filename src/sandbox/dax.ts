@@ -22,12 +22,12 @@ const DAX_RESOURCE_OPTIONS: Record<string, Record<string, any>> = {
   tensorlake:   { cpus: 8, memoryMb: 16384 },
   isorun:       { vcpus: 8, memMiB: 16384 },
   runloop:      { launch_parameters: { resource_size_request: 'CUSTOM_SIZE', custom_cpu_cores: 8, custom_gb_memory: 16 } },
-  daytona:      { resources: { cpu: 8, memory: 16 } },     // memory in GiB
   upstash:      { size: 'large' },                          // large = 8 cores, 16 GB
   vercel:       { resources: { vcpus: 8 } },               // no memory control
   blaxel:       { memory: 16384 },                          // CPU derived: cores = memory_MB / 2048 = 8
   beam:         { cpu: 8, memory: 16384 },                   // cpu = cores, memory = MiB
   codesandbox:  { vmTier: VMTier.Small },                  // Small = 8 CPU, 16 GiB
+  // daytona: omitted - resources cannot be specified when creating from a snapshot (uses defaults).
   northflank:   { deploymentPlan: process.env.NORTHFLANK_DEPLOYMENT_PLAN || 'nf-compute-50' },  // resolved by scripts/find-northflank-plan.ts
   declaw:       { templateId: 'node-large' },              // node-large template: 8 vCPU / 16 GiB RAM / 8 GiB disk
 };

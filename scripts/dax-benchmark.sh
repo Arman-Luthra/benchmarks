@@ -33,7 +33,7 @@ case "$ARCH" in
     ;;
 esac
 BUN_FILENAME="bun-linux-${BUN_ARCH}${BUN_BASELINE_SUFFIX}.zip"
-BUN_INTERNAL_PATH="${BUN_FILENAME}/bun"
+BUN_INTERNAL_PATH="bun-linux-${BUN_ARCH}${BUN_BASELINE_SUFFIX}/bun"
 
 # Detect the available package manager (apt-get on Debian/Ubuntu, dnf on RHEL/Fedora).
 PKG_MANAGER=""

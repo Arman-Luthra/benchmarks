@@ -10,6 +10,7 @@ interface Plan {
 
 interface PlansResponse {
   plans?: Plan[];
+  data?: { plans?: Plan[] };
 }
 
 async function main() {
@@ -27,10 +28,32 @@ async function main() {
   }
 
   const body = (await res.json()) as PlansResponse | Plan[];
-  const plans = Array.isArray(body) ? body : body.plans ?? [];
+  // Log the raw response structure (keys only, not the full body) for debugging.
+  if (body && typeof body === 'object' && !Array.isArray(body)) {
+    console.log('Northflank plans response keys:', Object.keys(body).join(', '));
+    if ('data' in body && body.data && typeof body.data === 'object') {
+      console.log('Northflank plans response.data keys:', Object.keys(body.data as object).join(', '));
+    }
+  } else if (Array.isArray(body)) {
+    console.log('Northflank plans response is an array of length', body.length);
+  } else {
+    console.log('Northflank plans response is of type', typeof body);
+  }
+
+  // The API may return plans at body.plans, body.data.plans, or as a bare array.
+  const plans: Plan[] = Array.isArray(body)
+    ? body
+    : body.plans ?? body.data?.plans ?? [];
 
   if (plans.length === 0) {
-    throw new Error('No plans returned from Northflank API');
+    console.warn('Warning: No plans returned from Northflank API, falling back to nf-compute-50');
+    const fallback = 'nf-compute-50';
+    console.log(`NORTHFLANK_DEPLOYMENT_PLAN=${fallback}`);
+    const githubEnv = process.env.GITHUB_ENV;
+    if (githubEnv) {
+      fs.appendFileSync(githubEnv, `NORTHFLANK_DEPLOYMENT_PLAN=${fallback}\n`);
+    }
+    return;
   }
 
   const targetCpu = 8;
@@ -64,6 +87,15 @@ async function main() {
       `Warning: no exact match for ${targetCpu} vCPU / ${targetRam} MB. ` +
         `Using closest suitable plan: ${selectedPlan.id} ` +
         `(${selectedPlan.cpuResource ?? '?'} vCPU, ${selectedPlan.ramResource ?? '?'} MB)`,
+    );
+  }
+
+  // Sanitise the plan ID before writing to GITHUB_ENV to avoid injection of
+  // newlines or other shell/environment-file control characters.
+  if (!/^[a-zA-Z0-9_-]+$/.test(selectedPlan.id)) {
+    throw new Error(
+      `Invalid Northflank plan ID: ${JSON.stringify(selectedPlan.id)} ` +
+        `(must match /^[a-zA-Z0-9_-]+$/)`,
     );
   }
 
