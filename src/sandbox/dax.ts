@@ -6,11 +6,11 @@ import { computeStats } from '../util/stats.js';
 import { withTimeout } from '../util/timeout.js';
 import { VMTier } from '@codesandbox/sdk';
 
-// The benchmark script is now loaded from the local filesystem (scripts/provider-benchmark.sh)
+// The benchmark script is now loaded from the local filesystem (scripts/dax-benchmark.sh)
 // rather than fetched over HTTP from upstream. This avoids a curl dependency inside the
 // sandbox (some providers don't ship curl). The previous upstream URL was:
 //   https://raw.githubusercontent.com/anomalyco/opencode/provider-benchmark/script/provider-benchmark.sh
-const BENCH_SCRIPT_PATH = path.resolve(import.meta.dirname, '../../scripts/provider-benchmark.sh');
+const BENCH_SCRIPT_PATH = path.resolve(import.meta.dirname, '../../scripts/dax-benchmark.sh');
 
 // Standardized resource sizing for fair comparison across providers.
 // Target: 8 vCPU, 16 GiB RAM.
@@ -179,10 +179,10 @@ const start = performance.now();
 // BENCH_DISK / BENCH_DONE / BENCH_ERROR structure consumed by the parser below.
 const marker = '__DAX_BENCH_HEREDOC_' + Math.random().toString(36).slice(2) + '__';
 const shellCmd =
-  "cat > /tmp/provider-benchmark.sh <<'" + marker + "'\n" +
+  "cat > /tmp/dax-benchmark.sh <<'" + marker + "'\n" +
   benchScript + "\n" +
   marker + "\n" +
-  "BENCH_PROVIDER=" + provider + " BENCH_REGION=unknown bash /tmp/provider-benchmark.sh";
+  "BENCH_PROVIDER=" + provider + " BENCH_REGION=unknown bash /tmp/dax-benchmark.sh";
 
 const result = spawnSync('bash', ['-c', shellCmd], {
   encoding: 'utf8',
