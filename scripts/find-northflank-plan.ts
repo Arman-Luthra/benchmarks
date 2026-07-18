@@ -1,0 +1,81 @@
+import 'dotenv/config';
+import fs from 'fs';
+
+interface Plan {
+  id: string;
+  cpuResource?: number;
+  ramResource?: number;
+  [key: string]: any;
+}
+
+interface PlansResponse {
+  plans?: Plan[];
+}
+
+async function main() {
+  const token = process.env.NORTHFLANK_TOKEN;
+  if (!token) {
+    throw new Error('NORTHFLANK_TOKEN environment variable is not set');
+  }
+
+  const res = await fetch('https://api.northflank.com/v1/plans', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to list Northflank plans: ${res.status} ${res.statusText}`);
+  }
+
+  const body = (await res.json()) as PlansResponse | Plan[];
+  const plans = Array.isArray(body) ? body : body.plans ?? [];
+
+  if (plans.length === 0) {
+    throw new Error('No plans returned from Northflank API');
+  }
+
+  const targetCpu = 8;
+  const targetRam = 16384; // 16 GiB in MB
+
+  const exactMatch = plans.find(
+    (p) => p.cpuResource === targetCpu && p.ramResource === targetRam,
+  );
+
+  let selectedPlan: Plan;
+  if (exactMatch) {
+    selectedPlan = exactMatch;
+    console.log(`Found Northflank plan with exact match: ${selectedPlan.id} (${targetCpu} vCPU, ${targetRam} MB)`);
+  } else {
+    const suitable = plans.filter(
+      (p) => (p.cpuResource ?? 0) >= targetCpu && (p.ramResource ?? 0) >= targetRam,
+    );
+    if (suitable.length === 0) {
+      throw new Error(
+        `No Northflank plan meets the target resources of ${targetCpu} vCPU / ${targetRam} MB`,
+      );
+    }
+    // Pick the closest plan by minimising normalised excess (1 vCPU == 2048 MB).
+    suitable.sort((a, b) => {
+      const scoreA = (a.cpuResource ?? 0) + (a.ramResource ?? 0) / 2048;
+      const scoreB = (b.cpuResource ?? 0) + (b.ramResource ?? 0) / 2048;
+      return scoreA - scoreB;
+    });
+    selectedPlan = suitable[0]!;
+    console.warn(
+      `Warning: no exact match for ${targetCpu} vCPU / ${targetRam} MB. ` +
+        `Using closest suitable plan: ${selectedPlan.id} ` +
+        `(${selectedPlan.cpuResource ?? '?'} vCPU, ${selectedPlan.ramResource ?? '?'} MB)`,
+    );
+  }
+
+  console.log(`NORTHFLANK_DEPLOYMENT_PLAN=${selectedPlan.id}`);
+
+  const githubEnv = process.env.GITHUB_ENV;
+  if (githubEnv) {
+    fs.appendFileSync(githubEnv, `NORTHFLANK_DEPLOYMENT_PLAN=${selectedPlan.id}\n`);
+  }
+}
+
+main().catch((error) => {
+  console.error('Failed to find Northflank plan:', error);
+  process.exit(1);
+});
