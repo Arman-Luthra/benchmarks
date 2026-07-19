@@ -26,6 +26,7 @@ export async function runSequentialWithPlatformReport(
   config: ProviderConfig,
   iterations: number,
   report: PlatformReportConfig,
+  runId: string,
 ): Promise<void> {
   const { name, timeout = 120_000, requiredEnvVars, sandboxOptions, destroyTimeoutMs = 15_000, createCompute } = config;
 
@@ -44,22 +45,9 @@ export async function runSequentialWithPlatformReport(
   console.log(`  Benchmark: ${report.benchmarkSlug}`);
   console.log('='.repeat(70));
 
-  await client.upsertBenchmark(report.benchmarkSlug, {
-    name: 'Sandbox TTI (local)',
-    kind: 'sandbox',
-  });
+  await client.planWorkers(report.benchmarkSlug, runId, name);
 
-  const { run } = await client.createRun(report.benchmarkSlug, {
-    name: `${name} sequential — ${iterations} iterations`,
-    totalTasks: iterations,
-    workerCount: 1,
-    participants: [name],
-  });
-  await client.planWorkers(report.benchmarkSlug, run.id, name);
-
-  const dashboardUrl = `${report.baseUrl.replace(/\/api\/v1\/?$/, '')}/${report.orgSlug}/benchmarks/${report.benchmarkSlug}/runs/${run.id}`;
-  console.log(`  Run created: ${run.id}`);
-  console.log(`  View at: ${dashboardUrl}\n`);
+  const dashboardUrl = `${report.baseUrl.replace(/\/api\/v1\/?$/, '')}/${report.orgSlug}/benchmarks/${report.benchmarkSlug}/runs/${runId}`;
 
   const task = defineTask<LifecycleState>('sandbox.lifecycle', [
     defineStep<LifecycleState>('create', async ({ state }) => {
@@ -86,7 +74,7 @@ export async function runSequentialWithPlatformReport(
 
   const result = await client.runWorker({
     benchmarkSlug: report.benchmarkSlug,
-    runId: run.id,
+    runId,
     participantSlug: name,
     concurrency: 1,
     task,
@@ -101,7 +89,7 @@ export async function runSequentialWithPlatformReport(
   });
 
   if (!result.assignment) {
-    console.error(`  No pending worker to claim for run ${run.id} — it may already be fully claimed.`);
+    console.error(`  No pending worker to claim for run ${runId} — it may already be fully claimed.`);
     return;
   }
 
