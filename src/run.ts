@@ -8,20 +8,11 @@ import { createBenchmarkClient } from '@computesdk/bench';
 import { runBenchmark } from './sandbox/benchmark.js';
 import { runConcurrentBenchmark } from './sandbox/concurrent.js';
 import { runStaggeredBenchmark } from './sandbox/staggered.js';
-<<<<<<< Updated upstream
-import { runSequentialWithPlatformReport } from './sandbox/report-run.js';
-import { runBurstWithPlatformReport } from './sandbox/report-run-burst.js';
-=======
-<<<<<<< Updated upstream
-import { runDaxBenchmark, writeDaxResultsJson } from './sandbox/dax.js';
-=======
 import { runSequentialWithPlatformReport } from './sandbox/report-run.js';
 import { runBurstWithPlatformReport } from './sandbox/report-run-burst.js';
 import { runDaxBenchmark, writeDaxResultsJson } from './sandbox/dax-benchmark.js';
 import { computeDaxCompositeScores } from './sandbox/dax-scoring.js';
 import { runDaxWithPlatformReport } from './sandbox/report-run-dax.js';
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 import { runStorageBenchmark, writeStorageResultsJson } from './storage/benchmark.js';
 import {
   runSnapshotForkBenchmark,
@@ -73,34 +64,19 @@ const staggerDelay = parseInt(getArgValue(args, '--stagger-delay') || '200', 10)
 const fileSizeArg = getArgValue(args, '--file-size') || '10MB';
 const datasetArg = getArgValue(args, '--dataset') || 'small';
 
-<<<<<<< Updated upstream
-// --report streams this run to a real benchmarks-platform instance (via
-// @computesdk/bench) instead of only writing local JSON — see
-// sandbox/report-run.ts and sandbox/report-run-burst.ts. Supported for
-// --mode sequential and --mode burst (or its --mode concurrent alias).
-=======
-<<<<<<< Updated upstream
-=======
 // --report streams this run to a real benchmarks-platform instance (via
 // @computesdk/bench) instead of only writing local JSON — see
 // sandbox/report-run.ts, sandbox/report-run-burst.ts, and
 // sandbox/report-run-dax.ts. Supported for --mode sequential, --mode burst
 // (or its --mode concurrent alias), and --mode dax.
->>>>>>> Stashed changes
 const reportToPlatform = args.includes('--report');
 const platformBaseUrl = (process.env.BENCHMARKS_PLATFORM_URL || 'http://localhost:3000').replace(/\/+$/, '') + '/api/v1';
 const platformOrgSlug = process.env.BENCHMARKS_PLATFORM_ORG_SLUG || 'computesdk';
 const platformBenchmarkSlug = getArgValue(args, '--benchmark-slug')
-<<<<<<< Updated upstream
-  || (rawMode === 'burst' || rawMode === 'concurrent' ? 'sandbox-burst-local' : 'sandbox-tti-local');
-
-=======
   || (rawMode === 'burst' || rawMode === 'concurrent' ? 'sandbox-burst-local'
     : rawMode === 'dax' ? 'sandbox-dax-local'
     : 'sandbox-tti-local');
 
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 function getArgValue(args: string[], flag: string): string | undefined {
   const idx = args.indexOf(flag);
   return idx !== -1 && idx + 1 < args.length ? args[idx + 1] : undefined;
@@ -119,42 +95,19 @@ function selectProviders<T extends { name: string }>(all: T[], names: string[] |
 }
 
 /** Resolve which modes to run */
-<<<<<<< Updated upstream
-function getModesToRun(): BenchmarkMode[] | ['storage'] | ['snapshot-fork'] | ['browser'] | ['browser-throughput'] {
-=======
-<<<<<<< Updated upstream
-function getModesToRun(): BenchmarkMode[] | ['storage'] | ['snapshot-fork'] | ['browser'] | ['browser-throughput'] | ['sandbox-dax'] {
-=======
 function getModesToRun(): BenchmarkMode[] | ['storage'] | ['snapshot-fork'] | ['browser'] | ['browser-throughput'] | ['dax'] {
->>>>>>> Stashed changes
->>>>>>> Stashed changes
   if (!rawMode) return ['sequential', 'staggered', 'burst'];
   if (rawMode === 'storage') return ['storage'];
   if (rawMode === 'snapshot-fork') return ['snapshot-fork'];
   if (rawMode === 'browser') return ['browser'];
   if (rawMode === 'browser-throughput') return ['browser-throughput'];
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-  if (rawMode === 'sandbox-dax') return ['sandbox-dax'];
-=======
   if (rawMode === 'dax') return ['dax'];
->>>>>>> Stashed changes
->>>>>>> Stashed changes
   const m = rawMode === 'concurrent' ? 'burst' : rawMode as BenchmarkMode;
   return [m];
 }
 
 /** Map mode to results subdirectory name */
-<<<<<<< Updated upstream
-function modeToDir(m: BenchmarkMode | 'storage' | 'snapshot-fork' | 'browser-throughput'): string {
-=======
-<<<<<<< Updated upstream
-function modeToDir(m: BenchmarkMode | 'storage' | 'snapshot-fork' | 'browser-throughput' | 'sandbox-dax'): string {
-=======
 function modeToDir(m: BenchmarkMode | 'storage' | 'snapshot-fork' | 'browser-throughput' | 'dax'): string {
->>>>>>> Stashed changes
->>>>>>> Stashed changes
   switch (m) {
     case 'sequential': return 'sequential_tti';
     case 'staggered': return 'staggered_tti';
@@ -163,14 +116,7 @@ function modeToDir(m: BenchmarkMode | 'storage' | 'snapshot-fork' | 'browser-thr
     case 'storage': return 'storage';
     case 'snapshot-fork': return 'snapshot-fork';
     case 'browser-throughput': return 'browser-throughput';
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-    case 'sandbox-dax': return 'sandbox-dax';
-=======
     case 'dax': return 'dax';
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     default: return `${m}_tti`;
   }
 }
@@ -208,11 +154,6 @@ async function createSharedPlatformRun(input: {
 }
 
 async function runMode(mode: BenchmarkMode, toRun: typeof providers): Promise<void> {
-<<<<<<< Updated upstream
-  if (mode === 'sequential' && reportToPlatform) {
-=======
-<<<<<<< Updated upstream
-=======
   if (mode === 'sequential' && reportToPlatform) {
     const { runId } = await createSharedPlatformRun({
       benchmarkDisplayName: 'Sandbox TTI (local)',
@@ -220,49 +161,33 @@ async function runMode(mode: BenchmarkMode, toRun: typeof providers): Promise<vo
       totalTasks: iterations,
       participantNames: toRun.map((p) => p.name),
     });
->>>>>>> Stashed changes
     for (const providerConfig of toRun) {
       await runSequentialWithPlatformReport(providerConfig, iterations, {
         benchmarkSlug: platformBenchmarkSlug,
         baseUrl: platformBaseUrl,
         orgSlug: platformOrgSlug,
-<<<<<<< Updated upstream
-      });
-=======
       }, runId);
->>>>>>> Stashed changes
     }
     return;
   }
 
   if (mode === 'burst' && reportToPlatform) {
-<<<<<<< Updated upstream
-=======
     const { runId } = await createSharedPlatformRun({
       benchmarkDisplayName: 'Sandbox burst TTI (local)',
       runName: `burst — concurrency ${concurrency}`,
       totalTasks: concurrency,
       participantNames: toRun.map((p) => p.name),
     });
->>>>>>> Stashed changes
     for (const providerConfig of toRun) {
       await runBurstWithPlatformReport(providerConfig, concurrency, {
         benchmarkSlug: platformBenchmarkSlug,
         baseUrl: platformBaseUrl,
         orgSlug: platformOrgSlug,
-<<<<<<< Updated upstream
-      });
-=======
       }, runId);
->>>>>>> Stashed changes
     }
     return;
   }
 
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
   console.log('\n' + '='.repeat(70));
   console.log(`  MODE: ${mode.toUpperCase()}`);
   if (mode === 'sequential') {
@@ -658,58 +583,11 @@ async function runBrowserThroughput(toRun: typeof throughputProviders): Promise<
   console.log(`Copied latest: ${latestPath}`);
 }
 
-<<<<<<< Updated upstream
-const REPORTABLE_RAW_MODES = new Set(['sequential', 'burst', 'concurrent']);
-
-async function main() {
-  if (reportToPlatform && !REPORTABLE_RAW_MODES.has(rawMode ?? '')) {
-    console.error('--report currently only supports --mode sequential or --mode burst (pass one explicitly, e.g. --mode burst).');
-=======
-<<<<<<< Updated upstream
-async function runSandboxDax(toRun: typeof providers): Promise<void> {
-  console.log('\n' + '='.repeat(70));
-  console.log('  MODE: SANDBOX DAX');
-  console.log(`  Iterations per provider: ${iterations}`);
-  console.log('='.repeat(70));
-
-  const results = [];
-
-  for (const providerConfig of toRun) {
-    const result = await runDaxBenchmark({ ...providerConfig, iterations });
-    results.push(result);
-  }
-
-  console.log('\n--- Sandbox Dax Benchmark Results ---');
-  for (const r of results) {
-    if (r.skipped) {
-      console.log(`${r.provider}: SKIPPED (${r.skipReason})`);
-      continue;
-    }
-    const ok = r.iterations.filter(i => !i.error).length;
-    const total = r.iterations.length;
-    const latest = [...r.iterations].reverse().find(i => i.phasesCompleted != null);
-    const phaseScore = latest ? `${latest.phasesCompleted}/${latest.phasesTotal}` : '--';
-    console.log(`${r.provider}: ${phaseScore} phases | total ${(r.summary.totalMs.median / 1000).toFixed(2)}s | prepare ${(r.summary.prepareMs.median / 1000).toFixed(2)}s | clone ${(r.summary.cloneMs.median / 1000).toFixed(2)}s | install ${(r.summary.installMs.median / 1000).toFixed(2)}s | typecheck ${(r.summary.typecheckMs.median / 1000).toFixed(2)}s (${ok}/${total} OK)`);
-  }
-
-  const timestamp = new Date().toISOString().slice(0, 10);
-  const resultsDir = path.resolve(__dirname, `../results/${modeToDir('sandbox-dax')}`);
-  fs.mkdirSync(resultsDir, { recursive: true });
-  const outPath = path.join(resultsDir, `${timestamp}.json`);
-  await writeDaxResultsJson(results, outPath);
-  const latestPath = path.join(resultsDir, 'latest.json');
-  fs.copyFileSync(outPath, latestPath);
-  console.log(`Copied latest: ${latestPath}`);
-}
-
-async function main() {
-=======
 const REPORTABLE_RAW_MODES = new Set(['sequential', 'burst', 'concurrent', 'dax']);
 
 async function main() {
   if (reportToPlatform && !REPORTABLE_RAW_MODES.has(rawMode ?? '')) {
     console.error('--report currently only supports --mode sequential, --mode burst, or --mode dax (pass one explicitly, e.g. --mode dax).');
->>>>>>> Stashed changes
     process.exit(1);
   }
 
@@ -725,10 +603,6 @@ async function main() {
     process.exit(1);
   }
 
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
   const modes = getModesToRun();
 
   // Handle browser-throughput mode separately
@@ -793,23 +667,6 @@ async function main() {
     return;
   }
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-  if (modes[0] === 'sandbox-dax') {
-    const toRun = providerFilter
-      ? providers.filter(p => p.name === providerFilter)
-      : providers;
-
-    if (toRun.length === 0) {
-      console.error(`Unknown provider: ${providerFilter}`);
-      console.error(`Available: ${providers.map(p => p.name).join(', ')}`);
-      process.exit(1);
-    }
-
-    await runSandboxDax(toRun);
-    console.log('\nAll sandbox dax tests complete.');
-=======
   // Handle dax mode separately (disk / CPU / pause-resume sub-test, same
   // provider registry as the regular sandbox benchmark)
   if (modes[0] === 'dax') {
@@ -836,11 +693,9 @@ async function main() {
       await runDax(toRun);
     }
     console.log('\nAll dax tests complete.');
->>>>>>> Stashed changes
     return;
   }
 
->>>>>>> Stashed changes
   console.log('ComputeSDK Sandbox Provider Benchmarks');
   console.log(`Tests to run: ${modes.join(', ')}`);
   console.log(`Date: ${new Date().toISOString()}\n`);
