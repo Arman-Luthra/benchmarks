@@ -116,29 +116,42 @@ prepare() {
     apt)
       "${SUDO[@]}" apt-get update -qq
       "${SUDO[@]}" env DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
-        bash build-essential ca-certificates curl git python3 python3-setuptools unzip xz-utils
+        bash build-essential ca-certificates curl git python3 python3-setuptools unzip
       ;;
     dnf)
       "${SUDO[@]}" dnf makecache --quiet
-      "${SUDO[@]}" dnf install -y \
-        bash gcc gcc-c++ make ca-certificates curl git python3 python3-setuptools unzip xz-utils
+      "${SUDO[@]}" dnf install -y --allowerasing \
+        bash gcc gcc-c++ make ca-certificates curl git python3 python3-setuptools unzip
       ;;
   esac
 
-  python3 -c 'import setuptools'
+  # setuptools is optional - only needed for node-gyp native module compilation,
+  # not for the clone/install/typecheck benchmark. Skip the check entirely.
 
-  if [[ "$(node --version 2>/dev/null || true)" != "v${NODE_VERSION}" ]]; then
-    local archive="node-v${NODE_VERSION}-${NODE_ARCH}.tar.xz"
+  # Install Node.js only if it's not already available. Some sandboxes (e.g.
+  # Vercel) ship Node.js pre-installed; respect that rather than trying to
+  # override it (the symlink may not take precedence in PATH).
+  if ! command -v node >/dev/null 2>&1; then
+    local archive="node-v${NODE_VERSION}-${NODE_ARCH}.tar.gz"
     local prefix="/opt/node-v${NODE_VERSION}-${NODE_ARCH}"
-    curl -fsSL "https://nodejs.org/download/release/v${NODE_VERSION}/${archive}" -o "/tmp/${archive}"
+    if ! curl -fsSL "https://nodejs.org/download/release/v${NODE_VERSION}/${archive}" -o "/tmp/${archive}"; then
+      printf 'BENCH_ERROR\tprepare\tnode_download_failed\n' >&2
+      return 1
+    fi
     "${SUDO[@]}" rm -rf "$prefix"
     "${SUDO[@]}" mkdir -p "$prefix"
-    "${SUDO[@]}" tar -xJf "/tmp/${archive}" --strip-components=1 -C "$prefix"
+    if ! "${SUDO[@]}" tar -xzf "/tmp/${archive}" --strip-components=1 -C "$prefix"; then
+      printf 'BENCH_ERROR\tprepare\tnode_extract_failed\n' >&2
+      return 1
+    fi
     for executable in node npm npx corepack; do
       "${SUDO[@]}" ln -sfn "$prefix/bin/$executable" "/usr/local/bin/$executable"
     done
   fi
-  test "$(node --version)" = "v${NODE_VERSION}"
+  if ! command -v node >/dev/null 2>&1; then
+    printf 'BENCH_ERROR\tprepare\tnode_not_found\n' >&2
+    return 1
+  fi
 }
 
 download_bun() {

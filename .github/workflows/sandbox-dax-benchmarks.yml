@@ -4,8 +4,10 @@ on:
   pull_request:
     paths:
       - 'src/sandbox/dax.ts'
+      - 'src/sandbox/providers.ts'
       - 'src/run.ts'
       - 'src/merge-results.ts'
+      - 'scripts/dax-benchmark.sh'
       - 'package.json'
       - '.github/workflows/sandbox-dax-benchmarks.yml'
   schedule:

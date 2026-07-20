@@ -165,130 +165,105 @@ async function runDaxIteration(sandbox: any, providerName: string, timeout: numb
   // it over HTTP inside the sandbox. This eliminates a curl dependency
   // (several providers don't ship curl in their sandboxes).
   const benchScript = fs.readFileSync(BENCH_SCRIPT_PATH, 'utf8');
-  const script = String.raw`
-const { spawnSync } = require('child_process');
-const { performance } = require('perf_hooks');
 
-const benchScript = ${JSON.stringify(benchScript)};
-const provider = ${JSON.stringify(providerName)};
+  // Write the benchmark script to /tmp inside the sandbox via a single-quoted
+  // heredoc (so $ and backticks in the script are not expanded) and execute it
+  // directly with bash. A random marker avoids collisions with anything
+  // appearing on its own line inside the script. Running the benchmark script
+  // directly (without a Node.js wrapper) lets providers that ship a different
+  // Node.js version pre-installed (e.g. Vercel) reuse their own binary.
+  const marker = '__DAX_BENCH_HEREDOC_' + Math.random().toString(36).slice(2) + '__';
+  const shellCmd =
+    `cat > /tmp/dax-benchmark.sh <<'${marker}'\n` +
+    benchScript +
+    `\n${marker}\n` +
+    `BENCH_PROVIDER=${providerName} BENCH_REGION=unknown bash /tmp/dax-benchmark.sh`;
 
-const start = performance.now();
-
-// Write the benchmark script to /tmp inside the sandbox via a single-quoted
-// heredoc (so $ and backticks in the script are not expanded) and execute it.
-// A random marker avoids collisions with anything appearing on its own line
-// inside the script. The script emits the same BENCH_PHASE / BENCH_META /
-// BENCH_DISK / BENCH_DONE / BENCH_ERROR structure consumed by the parser below.
-const marker = '__DAX_BENCH_HEREDOC_' + Math.random().toString(36).slice(2) + '__';
-const shellCmd =
-  "cat > /tmp/dax-benchmark.sh <<'" + marker + "'\n" +
-  benchScript + "\n" +
-  marker + "\n" +
-  "BENCH_PROVIDER=" + provider + " BENCH_REGION=unknown bash /tmp/dax-benchmark.sh";
-
-const result = spawnSync('bash', ['-c', shellCmd], {
-  encoding: 'utf8',
-  timeout: 540000,
-  stdio: ['ignore', 'pipe', 'pipe'],
-  env: { ...process.env, BENCH_PROVIDER: provider, BENCH_REGION: 'unknown' },
-});
-
-const totalMs = performance.now() - start;
-const stdout = result.stdout || '';
-const stderr = result.stderr || '';
-const exitCode = result.status;
-
-// Parse structured output lines
-const phases = {};
-const meta = {};
-const disk = {};
-let benchError = null;
-let doneCommit = null;
-
-for (const line of stdout.split('\n')) {
-  if (line.startsWith('BENCH_PHASE\t')) {
-    const parts = line.split('\t');
-    if (parts.length >= 3) phases[parts[1]] = parseInt(parts[2], 10);
-  } else if (line.startsWith('BENCH_META\t')) {
-    const parts = line.split('\t');
-    if (parts.length >= 3) meta[parts[1]] = parts[2];
-  } else if (line.startsWith('BENCH_DISK\t')) {
-    const parts = line.split('\t');
-    if (parts.length >= 3) disk[parts[1]] = parseInt(parts[2], 10);
-  } else if (line.startsWith('BENCH_DONE\t')) {
-    const parts = line.split('\t');
-    if (parts.length >= 2) doneCommit = parts[1];
-  }
-}
-
-for (const line of stderr.split('\n')) {
-  if (line.startsWith('BENCH_ERROR\t')) {
-    const parts = line.split('\t');
-    benchError = parts.slice(1).join(': ');
-  }
-}
-
-if (exitCode !== 0 && !benchError) {
-  // Include last few lines of stderr for diagnostics
-  const tail = stderr.trim().split('\n').slice(-3).join(' | ');
-  benchError = 'Script exited with code ' + exitCode + (tail ? ': ' + tail : '');
-}
-if (result.error) {
-  benchError = result.error.message || String(result.error);
-}
-
-// Count completed phases
-const phaseKeys = ['prepare', 'cache_clear', 'bun_download', 'bun_unpack', 'clone', 'install', 'typecheck'];
-const rawPhasesCompleted = phaseKeys.filter(k => phases[k] !== undefined).length;
-// The script's phase() function emits BENCH_PHASE even for the failing phase (it prints timing before checking exit code).
-// When there's an error, the last phase that emitted a BENCH_PHASE line is the one that failed, so don't count it.
-const phasesCompleted = benchError ? Math.max(0, rawPhasesCompleted - 1) : rawPhasesCompleted;
-
-// If no phases completed, the script didn't actually run (e.g. curl missing)
-if (phasesCompleted === 0 && !benchError) {
-  const tail = stderr.trim().split('\n').slice(-2).join(' | ');
-  benchError = 'No benchmark phases completed' + (tail ? ': ' + tail : ' (curl may not be available)');
-}
-
-console.log(JSON.stringify({
-  totalMs,
-  phasesCompleted,
-  phasesTotal: phaseKeys.length,
-  prepareMs: phases.prepare,
-  cacheClearMs: phases.cache_clear,
-  bunDownloadMs: phases.bun_download,
-  bunUnpackMs: phases.bun_unpack,
-  cloneMs: phases.clone,
-  installMs: phases.install,
-  typecheckMs: phases.typecheck,
-  diskAfterClone: disk.after_clone,
-  diskAfterInstall: disk.after_install,
-  diskAfterTypecheck: disk.after_typecheck,
-  commit: doneCommit || meta.commit,
-  bunVersion: meta.bun_version,
-  nodeVersion: meta.node_version,
-  architecture: meta.architecture,
-  kernel: meta.kernel,
-  logicalCpus: meta.logical_cpus,
-  cpuModel: meta.cpu_model,
-  memoryKib: meta.memory_kib,
-  ...(benchError ? { error: benchError } : {}),
-}));
-`;
-
+  const totalStart = Date.now();
   const result = await withTimeout(
-    sandbox.runCommand(`node <<'NODE'\n${script}\nNODE`, { timeout }),
+    sandbox.runCommand(shellCmd, { timeout }),
     timeout,
     'Dax benchmark timed out',
   ) as { exitCode: number; stdout?: string; stderr?: string };
+  const totalMs = Date.now() - totalStart;
 
-  if (result.exitCode !== 0) {
-    throw new Error(`Dax benchmark failed with exit code ${result.exitCode}: ${result.stderr || 'Unknown error'}`);
+  const stdout = result.stdout || '';
+  const stderr = result.stderr || '';
+  const exitCode = result.exitCode;
+
+  // Parse structured output lines emitted by the benchmark script.
+  const phases: Record<string, number> = {};
+  const meta: Record<string, string> = {};
+  const disk: Record<string, number> = {};
+  let benchError: string | null = null;
+  let doneCommit: string | null = null;
+
+  for (const line of stdout.split('\n')) {
+    if (line.startsWith('BENCH_PHASE\t')) {
+      const parts = line.split('\t');
+      if (parts.length >= 3) phases[parts[1]] = parseInt(parts[2], 10);
+    } else if (line.startsWith('BENCH_META\t')) {
+      const parts = line.split('\t');
+      if (parts.length >= 3) meta[parts[1]] = parts[2];
+    } else if (line.startsWith('BENCH_DISK\t')) {
+      const parts = line.split('\t');
+      if (parts.length >= 3) disk[parts[1]] = parseInt(parts[2], 10);
+    } else if (line.startsWith('BENCH_DONE\t')) {
+      const parts = line.split('\t');
+      if (parts.length >= 2) doneCommit = parts[1];
+    }
   }
 
-  const jsonLine = (result.stdout || '').trim().split('\n').reverse().find(line => line.trim().startsWith('{'));
-  if (!jsonLine) throw new Error('Dax benchmark did not emit JSON results');
-  return JSON.parse(jsonLine) as DaxTimingResult;
+  for (const line of stderr.split('\n')) {
+    if (line.startsWith('BENCH_ERROR\t')) {
+      const parts = line.split('\t');
+      benchError = parts.slice(1).join(': ');
+    }
+  }
+
+  if (exitCode !== 0 && !benchError) {
+    // Include last few lines of stderr for diagnostics
+    const tail = stderr.trim().split('\n').slice(-3).join(' | ');
+    benchError = 'Script exited with code ' + exitCode + (tail ? ': ' + tail : '');
+  }
+
+  // Count completed phases
+  const phaseKeys = ['prepare', 'cache_clear', 'bun_download', 'bun_unpack', 'clone', 'install', 'typecheck'];
+  const rawPhasesCompleted = phaseKeys.filter(k => phases[k] !== undefined).length;
+  // The script's phase() function emits BENCH_PHASE even for the failing phase (it prints timing before checking exit code).
+  // When there's an error, the last phase that emitted a BENCH_PHASE line is the one that failed, so don't count it.
+  const phasesCompleted = benchError ? Math.max(0, rawPhasesCompleted - 1) : rawPhasesCompleted;
+
+  // If no phases completed, the script didn't actually run (e.g. heredoc failure)
+  if (phasesCompleted === 0 && !benchError) {
+    const tail = stderr.trim().split('\n').slice(-2).join(' | ');
+    benchError = 'No benchmark phases completed' + (tail ? ': ' + tail : '');
+  }
+
+  return {
+    totalMs,
+    phasesCompleted,
+    phasesTotal: phaseKeys.length,
+    prepareMs: phases.prepare,
+    cacheClearMs: phases.cache_clear,
+    bunDownloadMs: phases.bun_download,
+    bunUnpackMs: phases.bun_unpack,
+    cloneMs: phases.clone,
+    installMs: phases.install,
+    typecheckMs: phases.typecheck,
+    diskAfterClone: disk.after_clone,
+    diskAfterInstall: disk.after_install,
+    diskAfterTypecheck: disk.after_typecheck,
+    commit: doneCommit || meta.commit,
+    bunVersion: meta.bun_version,
+    nodeVersion: meta.node_version,
+    architecture: meta.architecture,
+    kernel: meta.kernel,
+    logicalCpus: meta.logical_cpus,
+    cpuModel: meta.cpu_model,
+    memoryKib: meta.memory_kib,
+    ...(benchError ? { error: benchError } : {}),
+  };
 }
 
 function summarize(results: DaxTimingResult[]): DaxBenchmarkResult['summary'] {
