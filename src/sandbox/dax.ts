@@ -1,10 +1,43 @@
 import fs from 'fs';
 import os from 'os';
+import path from 'path';
 import type { ProviderConfig, Stats } from './types.js';
 import { computeStats } from '../util/stats.js';
 import { withTimeout } from '../util/timeout.js';
+import { VMTier } from '@codesandbox/sdk';
 
-const BENCH_SCRIPT_URL = 'https://raw.githubusercontent.com/anomalyco/opencode/provider-benchmark/script/provider-benchmark.sh';
+// The benchmark script is now loaded from the local filesystem (scripts/dax-benchmark.sh)
+// rather than fetched over HTTP from upstream. This avoids a curl dependency inside the
+// sandbox (some providers don't ship curl). The previous upstream URL was:
+//   https://raw.githubusercontent.com/anomalyco/opencode/provider-benchmark/script/provider-benchmark.sh
+const BENCH_SCRIPT_PATH = path.resolve(import.meta.dirname, '../../scripts/dax-benchmark.sh');
+
+// Standardized resource sizing for fair comparison across providers.
+// Target: 8 vCPU, 16 GiB RAM.
+// Each provider uses different parameter names and units, so we map per-provider.
+// Providers not listed here don't support CPU/memory configuration at sandbox creation time.
+// Note: E2B sets CPU/memory at template build time, not at sandbox creation.
+const DAX_RESOURCE_OPTIONS: Record<string, Record<string, any>> = {
+  modal:        { cpu: 4, cpuLimit: 4, memoryMiB: 16384 }, // Modal: 1 core = 2 vCPUs, so 4 cores = 8 vCPUs
+  tensorlake:   { cpus: 8, memoryMb: 16384 },
+  isorun:       { vcpus: 8, memMiB: 16384 },
+  runloop:      { launch_parameters: { resource_size_request: 'CUSTOM_SIZE', custom_cpu_cores: 8, custom_gb_memory: 16 } },
+  upstash:      { size: 'large' },                          // large = 8 cores, 16 GB
+  vercel:       { resources: { vcpus: 8 } },               // no memory control
+  blaxel:       { memory: 16384 },                          // CPU derived: cores = memory_MB / 2048 = 8
+  beam:         { cpu: 8, memory: 16384 },                   // cpu = cores, memory = MiB
+  codesandbox:  { vmTier: VMTier.Small },                  // Small = 8 CPU, 16 GiB
+  daytona:      { resources: { cpu: 8, memory: 16 } },     // memory in GiB; requires image-based creation (see providers.ts)
+  northflank:   { deploymentPlan: process.env.NORTHFLANK_DEPLOYMENT_PLAN || 'nf-compute-50' },  // resolved by scripts/find-northflank-plan.ts
+  declaw:       { templateId: 'node-large' },              // node-large template: 8 vCPU / 16 GiB RAM / 8 GiB disk
+  superserve:   { vcpu: 8, memoryMib: 16384 },               // vcpu = cores, memoryMib = MiB; overrides template defaults
+};
+
+function getSandboxOptionsWithResources(providerName: string, baseOptions?: Record<string, any>): Record<string, any> {
+  const resourceOpts = DAX_RESOURCE_OPTIONS[providerName];
+  if (!resourceOpts) return baseOptions ?? {};
+  return { ...baseOptions, ...resourceOpts };
+}
 
 export interface DaxTimingResult {
   totalMs: number;
@@ -74,7 +107,7 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
     let sandbox: any = null;
 
     try {
-      sandbox = await withTimeout(compute.sandbox.create(sandboxOptions), timeout, 'Sandbox creation timed out');
+      sandbox = await withTimeout(compute.sandbox.create(getSandboxOptionsWithResources(name, sandboxOptions)), timeout, 'Sandbox creation timed out');
       const result = await runDaxIteration(sandbox, name, timeout);
       results.push(result);
       if (result.error) {
@@ -128,20 +161,32 @@ export async function runDaxBenchmark(config: ProviderConfig): Promise<DaxBenchm
 }
 
 async function runDaxIteration(sandbox: any, providerName: string, timeout: number): Promise<DaxTimingResult> {
+  // Load the benchmark script from the local filesystem rather than fetching
+  // it over HTTP inside the sandbox. This eliminates a curl dependency
+  // (several providers don't ship curl in their sandboxes).
+  const benchScript = fs.readFileSync(BENCH_SCRIPT_PATH, 'utf8');
   const script = String.raw`
 const { spawnSync } = require('child_process');
 const { performance } = require('perf_hooks');
 
-const scriptUrl = ${JSON.stringify(BENCH_SCRIPT_URL)};
+const benchScript = ${JSON.stringify(benchScript)};
 const provider = ${JSON.stringify(providerName)};
 
 const start = performance.now();
 
-// Download and run the dax benchmark script via curl|bash.
-// The script emits structured BENCH_PHASE / BENCH_META / BENCH_DISK / BENCH_DONE
-// lines on stdout and BENCH_ERROR on stderr that we parse below.
-// If curl is not available the script will fail (which is expected and tracked).
-const result = spawnSync('bash', ['-c', 'curl -fsSL ' + scriptUrl + ' | BENCH_PROVIDER=' + provider + ' BENCH_REGION=unknown bash'], {
+// Write the benchmark script to /tmp inside the sandbox via a single-quoted
+// heredoc (so $ and backticks in the script are not expanded) and execute it.
+// A random marker avoids collisions with anything appearing on its own line
+// inside the script. The script emits the same BENCH_PHASE / BENCH_META /
+// BENCH_DISK / BENCH_DONE / BENCH_ERROR structure consumed by the parser below.
+const marker = '__DAX_BENCH_HEREDOC_' + Math.random().toString(36).slice(2) + '__';
+const shellCmd =
+  "cat > /tmp/dax-benchmark.sh <<'" + marker + "'\n" +
+  benchScript + "\n" +
+  marker + "\n" +
+  "BENCH_PROVIDER=" + provider + " BENCH_REGION=unknown bash /tmp/dax-benchmark.sh";
+
+const result = spawnSync('bash', ['-c', shellCmd], {
   encoding: 'utf8',
   timeout: 540000,
   stdio: ['ignore', 'pipe', 'pipe'],
@@ -232,7 +277,7 @@ console.log(JSON.stringify({
 `;
 
   const result = await withTimeout(
-    sandbox.runCommand(`node <<'NODE'\n${script}\nNODE`),
+    sandbox.runCommand(`node <<'NODE'\n${script}\nNODE`, { timeout }),
     timeout,
     'Dax benchmark timed out',
   ) as { exitCode: number; stdout?: string; stderr?: string };
@@ -313,7 +358,7 @@ export async function writeDaxResultsJson(results: DaxBenchmarkResult[], outPath
     version: '1.0',
     timestamp: new Date().toISOString(),
     environment: { node: process.version, platform: os.platform(), arch: os.arch() },
-    config: { mode: 'sandbox-dax', timeoutMs: 600000, scriptUrl: BENCH_SCRIPT_URL },
+    config: { mode: 'sandbox-dax', timeoutMs: 600000, scriptSource: 'local', scriptPath: BENCH_SCRIPT_PATH },
     results: cleanResults,
   };
 

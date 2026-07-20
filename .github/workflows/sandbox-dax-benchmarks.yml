@@ -57,6 +57,7 @@ jobs:
           - isorun
           - lightning
           - modal
+          - namespace
           - northflank
           - runloop
           - superserve
@@ -76,6 +77,16 @@ jobs:
           else
             npm ci
           fi
+      - name: Build E2B template with 8 vCPU / 16 GiB
+        if: matrix.provider == 'e2b'
+        env:
+          E2B_API_KEY: ${{ secrets.E2B_API_KEY }}
+        run: npx tsx scripts/build-e2b-template.ts
+      - name: Find Northflank plan for 8 vCPU / 16 GiB
+        if: matrix.provider == 'northflank'
+        env:
+          NORTHFLANK_TOKEN: ${{ secrets.NORTHFLANK_TOKEN }}
+        run: npx tsx scripts/find-northflank-plan.ts
       - name: Clear stale results from checkout
         run: rm -rf results/
       - name: Run dax benchmark
@@ -103,6 +114,7 @@ jobs:
           MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
           MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
           NORTHFLANK_TOKEN: ${{ secrets.NORTHFLANK_TOKEN }}
+          NSC_TOKEN: ${{ secrets.NSC_TOKEN }}
           NORTHFLANK_PROJECT_ID: ${{ secrets.NORTHFLANK_PROJECT_ID }}
           RUNLOOP_API_KEY: ${{ secrets.RUNLOOP_API_KEY }}
           SUPERSERVE_API_KEY: ${{ secrets.SUPERSERVE_API_KEY }}

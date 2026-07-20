@@ -14,7 +14,7 @@ import { isorun } from '@computesdk/isorun';
 // import { lelantos } from '@computesdk/lelantos';
 import { lightning } from '@computesdk/lightning';
 import { modal } from '@computesdk/modal';
-// import { namespace } from '@computesdk/namespace';
+import { namespace } from '@computesdk/namespace';
 import { northflank } from '@computesdk/northflank';
 // import { quilt } from '@computesdk/quilt';
 // import { railway } from '@computesdk/railway';
@@ -83,7 +83,7 @@ export const providers: ProviderConfig[] = [
     name: 'daytona',
     requiredEnvVars: ['DAYTONA_API_KEY'],
     createCompute: () => daytona({ apiKey: process.env.DAYTONA_API_KEY! }),
-    sandboxOptions: { autoStopInterval: 15, autoDeleteInterval: 0 },
+    sandboxOptions: { autoStopInterval: 15, autoDeleteInterval: 0, image: 'node:22' },
   },
   {
     name: 'declaw',
@@ -94,6 +94,7 @@ export const providers: ProviderConfig[] = [
     name: 'e2b',
     requiredEnvVars: ['E2B_API_KEY'],
     createCompute: () => e2b({ apiKey: process.env.E2B_API_KEY! }),
+    sandboxOptions: { templateId: 'base-8cpu-16gb', timeout: 600_000 },
   },
   {
     name: 'hopx',
@@ -121,12 +122,17 @@ export const providers: ProviderConfig[] = [
     requiredEnvVars: ['MODAL_TOKEN_ID', 'MODAL_TOKEN_SECRET'],
     createCompute: () => modal({ tokenId: process.env.MODAL_TOKEN_ID!, tokenSecret: process.env.MODAL_TOKEN_SECRET!, scalableSandboxes: true }),
   },
-  // {
-  //   name: 'namespace',
-  //   requiredEnvVars: ['NSC_TOKEN'],
-  //   createCompute: () => namespace({ token: process.env.NSC_TOKEN! }),
-  //   sandboxOptions: { image: 'node:22' },
-  // },
+  {
+    name: 'namespace',
+    requiredEnvVars: ['NSC_TOKEN'],
+    createCompute: () =>
+      namespace({
+        token: process.env.NSC_TOKEN!,
+        virtualCpu: 16,
+        memoryMegabytes: 32768,
+      }),
+    // Use namespace's builtin:base image (default in @computesdk/namespace@1.6.14+)
+  },
   {
     name: 'northflank',
     requiredEnvVars: ['NORTHFLANK_TOKEN', 'NORTHFLANK_PROJECT_ID'],
@@ -177,7 +183,11 @@ export const providers: ProviderConfig[] = [
     name: 'upstash',
     requiredEnvVars: ['UPSTASH_BOX_API_KEY'],
     createCompute: () => upstash({ apiKey: process.env.UPSTASH_BOX_API_KEY! }),
-    sandboxOptions: { ephemeral: true },
+    // Note: ephemeral: true is intentionally omitted. The ComputeSDK wrapper's
+    // ephemeral path doesn't forward `size` to EphemeralBox.create(), so
+    // size: 'large' would be silently dropped. Using a regular Box ensures
+    // the resource sizing from DAX_RESOURCE_OPTIONS is applied.
+    sandboxOptions: {},
   },
   {
     name: 'vercel',
