@@ -1,0 +1,48 @@
+name: Tilion Browser Benchmark
+
+# Mirrors browser-benchmarks.yml bench job: linux x64, node 24, npm ci,
+# same run command and default 100 iterations. Runner is ubuntu-latest
+# because the upstream namespace-profile-default pool is org-specific.
+on:
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: 'Iterations per provider'
+        required: false
+        default: '100'
+
+concurrency:
+  group: tilion-browser-benchmark
+  cancel-in-progress: true
+
+jobs:
+  bench:
+    name: Bench tilion
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Clear stale results from checkout
+        run: rm -rf results/browser/
+      - name: Run browser benchmark
+        env:
+          TILION_API_KEY: ${{ secrets.TILION_API_KEY }}
+        run: |
+          npm run bench -- \
+            --mode browser \
+            --provider tilion \
+            --iterations ${{ github.event.inputs.iterations || '100' }}
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-results-tilion
+          path: results/browser/
+          if-no-files-found: ignore
+          retention-days: 7
