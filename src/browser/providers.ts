@@ -7,6 +7,43 @@ import { steel } from '@computesdk/steel';
 import type { BrowserProviderConfig } from './types.js';
 
 /**
+ * Tilion Cloud adapter — plain HTTP API, no SDK package.
+ * session.create() opens an ephemeral stealth browser and fetches its CDP
+ * passthrough URL; session.destroy() tears it down.
+ */
+function tilion(opts: { apiKey: string; baseUrl?: string }) {
+  const base = opts.baseUrl ?? 'https://tilion-control.fly.dev';
+  const authHeader = { Authorization: `Bearer ${opts.apiKey}` };
+  const jsonHeaders = { ...authHeader, 'Content-Type': 'application/json' };
+
+  return {
+    session: {
+      async create(_options: Record<string, unknown> = {}) {
+        const res = await fetch(`${base}/v1/session`, {
+          method: 'POST',
+          headers: jsonHeaders,
+          body: JSON.stringify({ mode: 'ephemeral' }),
+        });
+        if (!res.ok) throw new Error(`tilion session create failed: ${res.status} ${await res.text()}`);
+        const session = await res.json() as { session_id: string };
+
+        const conn = await fetch(`${base}/v1/session/${session.session_id}/connect`, { headers: authHeader });
+        if (!conn.ok) throw new Error(`tilion CDP connect failed: ${conn.status} ${await conn.text()}`);
+        const { connect_url } = await conn.json() as { connect_url: string };
+
+        return { sessionId: session.session_id, connectUrl: connect_url };
+      },
+      async destroy(sessionId: string) {
+        const res = await fetch(`${base}/v1/session/${sessionId}`, { method: 'DELETE', headers: authHeader });
+        if (!res.ok && res.status !== 404) {
+          throw new Error(`tilion session destroy failed: ${res.status} ${await res.text()}`);
+        }
+      },
+    },
+  };
+}
+
+/**
  * Browser provider benchmark configurations.
  *
  * All providers use ComputeSDK's browser packages directly (no ComputeSDK API key).
@@ -71,6 +108,14 @@ export const browserProviders: BrowserProviderConfig[] = [
       apiKey: process.env.STEEL_API_KEY!
     }),
     sessionCreateOptions: { stealth: false },
+  },
+  {
+    name: 'tilion',
+    requiredEnvVars: ['TILION_API_KEY'],
+    createBrowserProvider: () => tilion({
+      apiKey: process.env.TILION_API_KEY!,
+    }),
+    sessionCreateOptions: {},
   },
   // add browser providers above
 ];
