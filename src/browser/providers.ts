@@ -7,6 +7,46 @@ import { steel } from '@computesdk/steel';
 import type { BrowserProviderConfig } from './types.js';
 
 /**
+ * Tilion has no @computesdk package yet; this inline adapter matches the
+ * session.create/destroy shape the benchmark expects.
+ */
+const tilion = (config: { apiKey: string; baseUrl?: string }) => {
+  const base = config.baseUrl ?? 'https://tilion-control.fly.dev';
+  const headers = {
+    Authorization: `Bearer ${config.apiKey}`,
+    'Content-Type': 'application/json',
+  };
+  return {
+    session: {
+      create: async (_opts: Record<string, unknown> = {}) => {
+        const res = await fetch(`${base}/v1/session`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ mode: 'ephemeral' }),
+        });
+        if (!res.ok) {
+          throw new Error(`tilion session create failed: HTTP ${res.status} - ${await res.text()}`);
+        }
+        const data = await res.json() as { session_id?: string; connect_url?: string };
+        if (!data.session_id || !data.connect_url) {
+          throw new Error('Invalid tilion session response');
+        }
+        return { sessionId: data.session_id, connectUrl: data.connect_url };
+      },
+      destroy: async (sessionId: string) => {
+        const res = await fetch(`${base}/v1/session/${sessionId}`, {
+          method: 'DELETE',
+          headers,
+        });
+        if (!res.ok) {
+          throw new Error(`tilion session destroy failed: HTTP ${res.status} - ${await res.text()}`);
+        }
+      },
+    },
+  };
+};
+
+/**
  * Browser provider benchmark configurations.
  *
  * All providers use ComputeSDK's browser packages directly (no ComputeSDK API key).
@@ -71,6 +111,13 @@ export const browserProviders: BrowserProviderConfig[] = [
       apiKey: process.env.STEEL_API_KEY!
     }),
     sessionCreateOptions: { stealth: false },
+  },
+  {
+    name: 'tilion',
+    requiredEnvVars: ['TILION_API_KEY'],
+    createBrowserProvider: () => tilion({
+      apiKey: process.env.TILION_API_KEY!,
+    }),
   },
   // add browser providers above
 ];
