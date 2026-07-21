@@ -1,0 +1,39 @@
+name: region probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: "Iterations"
+        default: "100"
+        required: false
+
+jobs:
+  probe:
+    runs-on: namespace-profile-tilion-test
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: whereami
+        run: |
+          echo "=== runner public IP / geo ==="
+          curl -s ipinfo.io || true
+          echo
+          echo "=== RTT (TCP+TLS appconnect, 10 samples) ==="
+          for h in api.onkernel.com tilion-control.fly.dev; do
+            echo -n "$h: "
+            for i in $(seq 1 10); do curl -so /dev/null -m 10 -w "%{time_appconnect} " "https://$h/"; done
+            echo
+          done
+      - run: npm install
+      - run: npm run bench -- --mode browser --provider kernel --iterations ${{ github.event.inputs.iterations || '100' }}
+        env:
+          KERNEL_API_KEY: ${{ secrets.KERNEL_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: probe-results
+          path: results/browser/
