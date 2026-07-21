@@ -7,41 +7,44 @@ import { steel } from '@computesdk/steel';
 import type { BrowserProviderConfig } from './types.js';
 
 /**
- * Tilion Cloud adapter — plain HTTP API, no SDK package.
- * session.create() opens an ephemeral stealth browser and fetches its CDP
- * passthrough URL; session.destroy() tears it down.
+ * Tilion has no @computesdk package yet; this inline adapter matches the
+ * session.create/destroy shape the benchmark expects.
  */
-function tilion(opts: { apiKey: string; baseUrl?: string }) {
-  const base = opts.baseUrl ?? 'https://tilion-control.fly.dev';
-  const authHeader = { Authorization: `Bearer ${opts.apiKey}` };
-  const jsonHeaders = { ...authHeader, 'Content-Type': 'application/json' };
-
+const tilion = (config: { apiKey: string; baseUrl?: string }) => {
+  const base = config.baseUrl ?? 'https://tilion-control.fly.dev';
+  const headers = {
+    Authorization: `Bearer ${config.apiKey}`,
+    'Content-Type': 'application/json',
+  };
   return {
     session: {
-      async create(_options: Record<string, unknown> = {}) {
+      create: async (_opts: Record<string, unknown> = {}) => {
         const res = await fetch(`${base}/v1/session`, {
           method: 'POST',
-          headers: jsonHeaders,
+          headers,
           body: JSON.stringify({ mode: 'ephemeral' }),
         });
-        if (!res.ok) throw new Error(`tilion session create failed: ${res.status} ${await res.text()}`);
-        const session = await res.json() as { session_id: string };
-
-        const conn = await fetch(`${base}/v1/session/${session.session_id}/connect`, { headers: authHeader });
-        if (!conn.ok) throw new Error(`tilion CDP connect failed: ${conn.status} ${await conn.text()}`);
-        const { connect_url } = await conn.json() as { connect_url: string };
-
-        return { sessionId: session.session_id, connectUrl: connect_url };
+        if (!res.ok) {
+          throw new Error(`tilion session create failed: HTTP ${res.status} - ${await res.text()}`);
+        }
+        const data = await res.json() as { session_id?: string; connect_url?: string };
+        if (!data.session_id || !data.connect_url) {
+          throw new Error('Invalid tilion session response');
+        }
+        return { sessionId: data.session_id, connectUrl: data.connect_url };
       },
-      async destroy(sessionId: string) {
-        const res = await fetch(`${base}/v1/session/${sessionId}`, { method: 'DELETE', headers: authHeader });
-        if (!res.ok && res.status !== 404) {
-          throw new Error(`tilion session destroy failed: ${res.status} ${await res.text()}`);
+      destroy: async (sessionId: string) => {
+        const res = await fetch(`${base}/v1/session/${sessionId}`, {
+          method: 'DELETE',
+          headers,
+        });
+        if (!res.ok) {
+          throw new Error(`tilion session destroy failed: HTTP ${res.status} - ${await res.text()}`);
         }
       },
     },
   };
-}
+};
 
 /**
  * Browser provider benchmark configurations.
@@ -115,7 +118,6 @@ export const browserProviders: BrowserProviderConfig[] = [
     createBrowserProvider: () => tilion({
       apiKey: process.env.TILION_API_KEY!,
     }),
-    sessionCreateOptions: {},
   },
   // add browser providers above
 ];
