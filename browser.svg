@@ -58,16 +58,16 @@
   <!-- Row 1 -->
   <text class="rank rank-1" x="40" y="208">1</text>
   <text class="row provider" x="80" y="208">Kernel</text>
-  <text class="row total" x="240" y="208">36.9</text>
-  <text class="row" x="340" y="208">6.02s</text>
-  <text class="row" x="480" y="208">0.14s</text>
-  <text class="row" x="620" y="208">0.17s</text>
+  <text class="row total" x="240" y="208">42.0</text>
+  <text class="row" x="340" y="208">5.04s</text>
+  <text class="row" x="480" y="208">0.15s</text>
+  <text class="row" x="620" y="208">0.19s</text>
   <text class="row" x="760" y="208">0.03s</text>
-  <text class="row total medium" x="900" y="208">6.22s</text>
+  <text class="row total medium" x="900" y="208">5.70s</text>
   <text class="row status" x="1060" y="208">100/100</text>
 
   <!-- Timestamp -->
-  <text class="timestamp" x="1256" y="268" text-anchor="end">Last updated: Jul 24, 2026, 02:16 AM UTC</text>
+  <text class="timestamp" x="1256" y="268" text-anchor="end">Last updated: Jul 31, 2026, 02:20 AM UTC</text>
 
   <!-- Footnote -->
   <text class="timestamp" x="24" y="282">Measures full session lifecycle: create, connect via CDP, navigate to example.com, release. Lower total time is better.</text>
