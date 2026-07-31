@@ -55,7 +55,7 @@
   <text class="table-header" x="1090" y="162">Status</text>
 
   <!-- Timestamp -->
-  <text class="timestamp" x="1176" y="224" text-anchor="end">Last updated: Jul 24, 2026, 09:17 AM UTC</text>
+  <text class="timestamp" x="1176" y="224" text-anchor="end">Last updated: Jul 31, 2026, 09:40 AM UTC</text>
 
   <!-- Footnote -->
   <text class="timestamp" x="24" y="238">Measures snapshot creation and fork provisioning (from snapshot and from live). Lower time is better.</text>
